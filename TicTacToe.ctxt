@@ -1,0 +1,22 @@
+#BlueJ class context
+comment0.params=frame
+comment0.target=TicTacToe(MyFrame)
+comment1.params=
+comment1.target=java.util.ArrayList\ getSpielfeld()
+comment2.params=tic\ tac\ toe\ wtf
+comment2.target=boolean\ check(int,\ int,\ int,\ int)
+comment3.params=tic\ tac\ toe\ wtf
+comment3.target=java.lang.String\ click(int,\ int,\ int,\ int)
+comment4.params=feld
+comment4.target=java.lang.String\ click(Feld)
+comment5.params=
+comment5.target=boolean\ checkWin()
+comment6.params=
+comment6.target=int\ anzahlZ\u00FCge()
+comment7.params=zug
+comment7.target=java.lang.String\ zug(int)
+comment8.params=
+comment8.target=void\ reset()
+comment9.params=output
+comment9.target=void\ toJText(MyScrollingTextArea)
+numComments=10
