@@ -41,7 +41,7 @@ public class MyFrame extends JFrame implements ActionListener
     private Firebase fire;
     private Firebase fireFeld;
     private int spieler = 0;
-    private int ich;
+    private int ich = -1;
     private int du ;
     private int TesteNachSpieler = -1;
     public long anzahlZüge = 0;
@@ -49,7 +49,6 @@ public class MyFrame extends JFrame implements ActionListener
 
     public MyFrame()
     {   
-
         farbeSpieler.add(new Color(200,0,200));
         farbeSpieler.add(new Color(200,200,0));
 
@@ -175,6 +174,7 @@ public class MyFrame extends JFrame implements ActionListener
 
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
+                    System.out.println("The read failed: " + firebaseError.getMessage());
                 }
             });
 
