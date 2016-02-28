@@ -34,6 +34,7 @@ public class MyFrame extends JFrame implements ActionListener
     JMenuItem showAll;
     JMenuItem resetOutput;
     JMenuItem KIBattle;
+    JMenuItem DelFire;
 
     private Firebase fire;
     private int spieler = 0;
@@ -81,6 +82,8 @@ public class MyFrame extends JFrame implements ActionListener
         showAll.addActionListener(this);
         KIBattle = new JMenuItem("KI Kampf");
         KIBattle.addActionListener(this);
+        DelFire = new JMenuItem("Delete FireBaseSave");
+        DelFire.addActionListener(this);
         resetOutput = new JMenuItem("reset Ausgabe");
         resetOutput.addActionListener(this);
         menueLeiste.add(datei);
@@ -90,6 +93,7 @@ public class MyFrame extends JFrame implements ActionListener
         TTT.add(showAll);
         TTT.add(resetOutput);
         TTT.add(KIBattle);
+        TTT.add(DelFire);
         this.setJMenuBar(menueLeiste);
 
         this.setVisible(true);
@@ -119,7 +123,12 @@ public class MyFrame extends JFrame implements ActionListener
                     System.out.println("There are " + snapshot.child("Feld").getChildrenCount() + " Felder");
                     spieler = snapshot.child("Spieler").getValue(int.class);
                     if(snapshot.child("Feld").getChildrenCount() > toe.Felder.size()){
-                        setze(snapshot.child("Feld").child(String.valueOf(snapshot.child("Feld").getChildrenCount())).getValue(Feld.class));
+                        Feld feld = (snapshot.child("Feld").child(String.valueOf(snapshot.child("Feld").getChildrenCount() - 1)).getValue(Feld.class));
+                        toe.addFeld(feld);
+                        setzeButton(feld);
+                        String s = toe.click(feld.A(),feld.B(),feld.C(),feld.D());
+                        output.writeLine(s);
+                        //setze(snapshot.child("Feld").child(String.valueOf(snapshot.child("Feld").getChildrenCount() - 1)).getValue(Feld.class));
                     }
                     // Hier Passiert Was
                 }
@@ -173,6 +182,9 @@ public class MyFrame extends JFrame implements ActionListener
         }
         if (event.getSource() == resetOutput){
             output.clear();
+        }
+        if (event.getSource() == DelFire){
+            fire.setValue(null);
         }
         if (event.getSource() == KIBattle){
             Checker checker = new Checker();

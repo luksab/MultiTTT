@@ -1,9 +1,6 @@
 import java.util.*;
 public class Checker
 {
-    // instance variables - replace the example below with your own
-    private int x;
-
     public Checker()
     {
 
@@ -11,8 +8,9 @@ public class Checker
 
     public int checkWin(ArrayList<Feld> Felder,int[][][][] Spielfeld){
         int gewonnen = -1;
+        System.out.println("Checker Called");
 
-        for(int sp = 0; sp < 2; sp++){
+        for(int sp = -1; sp < 2; sp++){
             for(int i=0; i<Felder.size() -1;i++){
                 if(Felder.get(Felder.size() -1).spieler() == sp && Felder.get(Felder.size() -1).A() == Felder.get(i).A() && Felder.get(Felder.size() -1).C() == Felder.get(i).C()){
                     if((Felder.get(Felder.size() -1).B() + 1 == Felder.get(i).B() && Felder.get(Felder.size() -1).D() + 1 == Felder.get(i).D()) || (Felder.get(Felder.size() -1).B() - 1 == Felder.get(i).B() && Felder.get(Felder.size() -1).D() - 1 == Felder.get(i).D())){
@@ -30,7 +28,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -53,7 +51,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -75,7 +73,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -97,7 +95,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -120,7 +118,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -143,7 +141,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -165,7 +163,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -187,7 +185,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -210,7 +208,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -233,7 +231,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -256,7 +254,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -279,7 +277,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -304,7 +302,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -328,7 +326,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -352,7 +350,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -377,7 +375,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -401,7 +399,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -425,7 +423,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -450,7 +448,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -474,7 +472,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -498,7 +496,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -523,7 +521,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -547,7 +545,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -571,7 +569,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -597,7 +595,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -622,7 +620,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -647,7 +645,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
@@ -672,7 +670,7 @@ public class Checker
                         }
                         if(zaehler == 5)
                         {
-                            gewonnen = sp;
+                            gewonnen = sp; System.out.println("Gewonnen hat "+sp);
                         }
                     }
                 }
