@@ -46,10 +46,10 @@ public class TicTacToe
         Felder.add(feld);
         String s = "Das solltest du nicht sehen.";
         if(checkWin()){
-            s = "Spieler "+feld.spieler()+" hat gewonnen!";
+            s = "Spieler "+(feld.spieler()+1)+" hat gewonnen!";
         }
         else{
-            s = "Spieler "+feld.spieler()+" hat auf das Feld "+feld.A()+"|"+feld.B()+"|"+feld.C()+"|"+feld.D()+" gesetzt";
+            s = "Spieler "+(feld.spieler()+1)+" hat auf das Feld "+feld.A()+"|"+feld.B()+"|"+feld.C()+"|"+feld.D()+" gesetzt";
         }
         if(frame.spieler() == 0){
             frame.setSpieler(1);

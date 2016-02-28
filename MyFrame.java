@@ -36,6 +36,7 @@ public class MyFrame extends JFrame implements ActionListener
     JMenuItem resetOutput;
     JMenuItem KIBattle;
     JMenuItem DelFire;
+    JMenuItem ChPW;
 
     private Firebase fire;
     private Firebase fireFeld;
@@ -44,6 +45,7 @@ public class MyFrame extends JFrame implements ActionListener
     private int du ;
     private int TesteNachSpieler = -1;
     public long anzahlZüge = 0;
+    private String Email;
 
     public MyFrame()
     {   
@@ -85,6 +87,8 @@ public class MyFrame extends JFrame implements ActionListener
         showAll.addActionListener(this);
         KIBattle = new JMenuItem("KI Kampf");
         KIBattle.addActionListener(this);
+        ChPW = new JMenuItem("Ändere Passwort");
+        ChPW.addActionListener(this);
         DelFire = new JMenuItem("Delete FireBaseSave");
         DelFire.addActionListener(this);
         resetOutput = new JMenuItem("reset Ausgabe");
@@ -97,23 +101,25 @@ public class MyFrame extends JFrame implements ActionListener
         TTT.add(resetOutput);
         TTT.add(KIBattle);
         TTT.add(DelFire);
+        TTT.add(ChPW);
         this.setJMenuBar(menueLeiste);
 
         this.setVisible(true);
 
         fire = new Firebase("https://blistering-fire-5630.firebaseIO.com/");
         fireFeld = new Firebase("https://blistering-fire-5630.firebaseIO.com/Feld");
-        
-            
+
         fire.authWithPassword(Login[0], Login[1], new Firebase.AuthResultHandler() {
                 @Override
                 public void onAuthenticated(AuthData authData) {
                     System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
+                    Email = ""+authData.getProviderData().get("email");
                 }
 
                 @Override
                 public void onAuthenticationError(FirebaseError firebaseError) {
-                    System.out.println("FireBase is kaputt"+firebaseError);
+                    output.writeLine(""+firebaseError);
+                    //System.out.println("FireBase is kaputt"+firebaseError);
                 }
             });
 
@@ -121,8 +127,8 @@ public class MyFrame extends JFrame implements ActionListener
         fire.child("Feld").setValue(null);
 
         //eventListener           
-            
-            fireFeld.addValueEventListener(new ValueEventListener() {
+
+        fireFeld.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     anzahlZüge = snapshot.getChildrenCount();
@@ -144,8 +150,7 @@ public class MyFrame extends JFrame implements ActionListener
                     System.out.println("The read failed: " + firebaseError.getMessage());
                 }
             });
-            
-            
+
         //listen Once
         fire.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -174,27 +179,38 @@ public class MyFrame extends JFrame implements ActionListener
             });
 
     } 
-    
-    public String[] LoginBox(/*String[] bla*/){
 
-		// Erstellung Array vom Datentyp Object, Hinzufügen der Komponenten		
-		JTextField EMail = new JTextField();
-		JTextField Passwd = new JTextField();
-                Object[] message = {"E-Mail", EMail, 
-        		"Passwort", Passwd};
+    public String[] LoginBox(){
+        JTextField EMail = new JTextField();
+        JTextField Passwd = new JTextField();
+        Object[] message = {"E-Mail", EMail, 
+                "Passwort", Passwd};
 
-                JOptionPane pane = new JOptionPane( message, 
-                                                JOptionPane.PLAIN_MESSAGE, 
-                                                JOptionPane.OK_CANCEL_OPTION);
-                pane.createDialog(null, "FireBase Login").setVisible(true);
-
-                //System.out.println("Eingabe: " + EMail.getText() + ", " + Passwd.getText());
+        JOptionPane pane = new JOptionPane( message, 
+                JOptionPane.PLAIN_MESSAGE, 
+                JOptionPane.OK_CANCEL_OPTION);
+        pane.createDialog(null, "FireBase Login").setVisible(true);
         String[] Login = new String[2];
         Login[0] = EMail.getText();
         Login[1] = Passwd.getText();
-		return Login;
-                //System.exit(0);
-	}
+        return Login;
+    }
+
+    public String[] PasswdChangeBox(){
+        JTextField PWAlt = new JTextField();
+        JTextField PWNeu = new JTextField();
+        Object[] message = {"Altes Passwort", PWAlt, 
+                "Neues Passwort", PWNeu};
+
+        JOptionPane pane = new JOptionPane( message, 
+                JOptionPane.PLAIN_MESSAGE, 
+                JOptionPane.OK_CANCEL_OPTION);
+        pane.createDialog(null, "FireBase PW Change").setVisible(true);
+        String[] Login = new String[2];
+        Login[0] = PWAlt.getText();
+        Login[1] = PWNeu.getText();
+        return Login;
+    }
 
     public static void main(String[] args){        
         new MyFrame();
@@ -203,9 +219,11 @@ public class MyFrame extends JFrame implements ActionListener
     public void actionPerformed(ActionEvent event)
     {        
         if (event.getSource() == reset){
+            fire.setValue(null);
             reset();
         }
         if (event.getSource() == beenden){
+            fire.setValue(null);
             this.dispose();
         }
         if (event.getSource() == showAll){
@@ -216,6 +234,20 @@ public class MyFrame extends JFrame implements ActionListener
         }
         if (event.getSource() == DelFire){
             fire.setValue(null);
+        }
+        if (event.getSource() == ChPW){
+            String[] PW = PasswdChangeBox();
+            fire.changePassword(Email, PW[0], PW[1],new Firebase.ResultHandler() {
+                    @Override
+                    public void onSuccess() {
+                        output.writeLine("Hat geklappt");
+                    }
+
+                    @Override
+                    public void onError(FirebaseError firebaseError) {
+                        output.writeLine(""+firebaseError);
+                    }
+                });
         }
         if (event.getSource() == KIBattle){
             Checker checker = new Checker();
