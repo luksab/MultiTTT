@@ -10,6 +10,9 @@ public class StarteAnwendung
 {
    static MyFrame f;
     
+   public static void main(String[] args){        
+        new StarteAnwendung();
+    }
    public StarteAnwendung() 
    {
        f = new MyFrame(); 
