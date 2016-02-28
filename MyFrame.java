@@ -6,6 +6,7 @@ import com.firebase.client.*;
 
 public class MyFrame extends JFrame implements ActionListener
 {
+    String[] Login = LoginBox();
     final int xMax = 1345;
     final int yMax = 990;
     final int dxy = 10;
@@ -104,7 +105,7 @@ public class MyFrame extends JFrame implements ActionListener
         fireFeld = new Firebase("https://blistering-fire-5630.firebaseIO.com/Feld");
         
             
-        fire.authWithPassword("luksablp@gmail.com", "sabatschus", new Firebase.AuthResultHandler() {
+        fire.authWithPassword(Login[0], Login[1], new Firebase.AuthResultHandler() {
                 @Override
                 public void onAuthenticated(AuthData authData) {
                     System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
@@ -173,8 +174,29 @@ public class MyFrame extends JFrame implements ActionListener
             });
 
     } 
+    
+    public String[] LoginBox(/*String[] bla*/){
 
-    public static void main(String[] args){
+		// Erstellung Array vom Datentyp Object, Hinzufügen der Komponenten		
+		JTextField EMail = new JTextField();
+		JTextField Passwd = new JTextField();
+                Object[] message = {"E-Mail", EMail, 
+        		"Passwort", Passwd};
+
+                JOptionPane pane = new JOptionPane( message, 
+                                                JOptionPane.PLAIN_MESSAGE, 
+                                                JOptionPane.OK_CANCEL_OPTION);
+                pane.createDialog(null, "FireBase Login").setVisible(true);
+
+                //System.out.println("Eingabe: " + EMail.getText() + ", " + Passwd.getText());
+        String[] Login = new String[2];
+        Login[0] = EMail.getText();
+        Login[1] = Passwd.getText();
+		return Login;
+                //System.exit(0);
+	}
+
+    public static void main(String[] args){        
         new MyFrame();
     }
 
