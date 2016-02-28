@@ -37,8 +37,10 @@ public class MyFrame extends JFrame implements ActionListener
     JMenuItem DelFire;
 
     private Firebase fire;
+    private Firebase fireFeld;
     private int spieler = 0;
     private int ich;
+    private int du ;
     private int TesteNachSpieler = -1;
     public long anzahlZüge = 0;
 
@@ -99,6 +101,9 @@ public class MyFrame extends JFrame implements ActionListener
         this.setVisible(true);
 
         fire = new Firebase("https://blistering-fire-5630.firebaseIO.com/");
+        fireFeld = new Firebase("https://blistering-fire-5630.firebaseIO.com/Feld");
+        
+            
         fire.authWithPassword("luksablp@gmail.com", "sabatschus", new Firebase.AuthResultHandler() {
                 @Override
                 public void onAuthenticated(AuthData authData) {
@@ -107,30 +112,30 @@ public class MyFrame extends JFrame implements ActionListener
 
                 @Override
                 public void onAuthenticationError(FirebaseError firebaseError) {
-                    System.out.println("FireBase is kaputt");
+                    System.out.println("FireBase is kaputt"+firebaseError);
                 }
             });
 
         //reset Feld
         fire.child("Feld").setValue(null);
-        fire.child("Spieler").setValue(0);
 
-        //eventListener
-        fire.addValueEventListener(new ValueEventListener() {
+        //eventListener           
+            
+            fireFeld.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
-                    anzahlZüge = snapshot.child("Feld").getChildrenCount();
+                    anzahlZüge = snapshot.getChildrenCount();
                     System.out.println("There are " + snapshot.child("Feld").getChildrenCount() + " Felder");
-                    spieler = snapshot.child("Spieler").getValue(int.class);
-                    if(snapshot.child("Feld").getChildrenCount() > toe.Felder.size()){
-                        Feld feld = (snapshot.child("Feld").child(String.valueOf(snapshot.child("Feld").getChildrenCount() - 1)).getValue(Feld.class));
-                        toe.addFeld(feld);
-                        setzeButton(feld);
-                        String s = toe.click(feld.A(),feld.B(),feld.C(),feld.D());
-                        output.writeLine(s);
-                        //setze(snapshot.child("Feld").child(String.valueOf(snapshot.child("Feld").getChildrenCount() - 1)).getValue(Feld.class));
+                    if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).exists()){
+                        Feld feld = (snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).getValue(Feld.class));
+                        if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).getValue(Feld.class).spieler() == ich && feld.spieler() == ich){
+                            spieler = du;
+                        }
+                        else if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).exists()){
+                            spieler = ich;
+                        }
+                        setze(feld);
                     }
-                    // Hier Passiert Was
                 }
 
                 @Override
@@ -138,6 +143,8 @@ public class MyFrame extends JFrame implements ActionListener
                     System.out.println("The read failed: " + firebaseError.getMessage());
                 }
             });
+            
+            
         //listen Once
         fire.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -146,11 +153,13 @@ public class MyFrame extends JFrame implements ActionListener
                     if(snapshot.child("SpielerAnzahl").getValue(int.class) == 0){
                         output.writeLine("Du bist Spieler 1");
                         ich = 0;
+                        du  = 1;
                         fire.child("SpielerAnzahl").setValue(1);
                     }
                     if(snapshot.child("SpielerAnzahl").getValue(int.class) == 1){
                         output.writeLine("Du bist Spieler 2");
                         ich = 1;
+                        du  = 0;
                         fire.child("SpielerAnzahl").setValue(2);
                     }
                     if(snapshot.child("SpielerAnzahl").getValue(int.class) == 2){
@@ -196,12 +205,11 @@ public class MyFrame extends JFrame implements ActionListener
         for(int i=0;i<625;i++){
             if (event.getSource()==Buttons.get(i)){
                 if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && ich == spieler){
-                    setze(new Feld((i%25)/5,(i%5),(i/25)/5,((i/25)%5),spieler));
+                    fire.child("Feld").child(""+anzahlZüge).setValue(new Feld((i%25)/5,(i%5),(i/25)/5,((i/25)%5),spieler));
                 }
                 else {
                     String s = "Du kannst nicht in das Feld "+(i%25)/5+"|"+(i%5)+"|"+(i/25)/5+"|"+((i/25)%5)+" setzen";
-                    output.write(s);
-                    output.newLine();
+                    output.writeLine(s);
                 }
                 break;
             }
@@ -215,10 +223,9 @@ public class MyFrame extends JFrame implements ActionListener
 
     public void setze(Feld feld){
         if(toe.check(feld.A(),feld.B(),feld.C(),feld.D())){
-            //setzeButton(feld);
-            //String s = toe.click(feld.A(),feld.B(),feld.C(),feld.D());
-            //output.writeLine(s);
-            fire.child("Feld").child(""+anzahlZüge).setValue(feld);
+            setzeButton(feld);
+            String s = toe.click(feld);
+            output.writeLine(s);
         }
         else {
             String s = "Du kannst nicht in das Feld "+feld.A()+"|"+feld.B()+"|"+feld.C()+"|"+feld.D()+" setzen";
@@ -232,7 +239,6 @@ public class MyFrame extends JFrame implements ActionListener
     }
 
     public void setSpieler(int Neuspieler){
-        spieler = Neuspieler;
         fire.child("Spieler").setValue(spieler);
     }
 
