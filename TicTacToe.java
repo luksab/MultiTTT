@@ -40,22 +40,15 @@ public class TicTacToe
         Felder.add(feld);
     }
 
-    public String click(Feld feld)
+    public String click()
     {
-        Spielfeld[feld.A()][feld.B()][feld.C()][feld.D()] = feld.spieler();
-        Felder.add(feld);
+        Feld feld = Felder.get(Felder.size() -1);
         String s = "Das solltest du nicht sehen.";
         if(checkWin()){
-            s = "Spieler "+(feld.spieler()+1)+" hat gewonnen!";
+            s = "Spieler "+feld.spieler()+" hat gewonnen!";
         }
         else{
-            s = "Spieler "+(feld.spieler()+1)+" hat auf das Feld "+feld.A()+"|"+feld.B()+"|"+feld.C()+"|"+feld.D()+" gesetzt";
-        }
-        if(frame.spieler() == 0){
-            frame.setSpieler(1);
-        }
-        else{ 
-            frame.setSpieler(0);
+            s = "Spieler "+feld.spieler()+" hat auf das Feld "+feld.A()+"|"+feld.B()+"|"+feld.C()+"|"+feld.D()+" gesetzt";
         }
         return s;
     }

@@ -25,8 +25,6 @@ public class MyFrame extends JFrame implements ActionListener
     ArrayList<MyButton> Buttons = new ArrayList<MyButton>();
     TicTacToe toe;
 
-    BilloKI KI;
-
     JMenuBar menueLeiste;
     JMenu datei;
     JMenu TTT;
@@ -34,7 +32,6 @@ public class MyFrame extends JFrame implements ActionListener
     JMenuItem beenden;
     JMenuItem showAll;
     JMenuItem resetOutput;
-    JMenuItem KIBattle;
     JMenuItem DelFire;
     JMenuItem ChPW;
 
@@ -46,14 +43,14 @@ public class MyFrame extends JFrame implements ActionListener
     private int TesteNachSpieler = -1;
     private int spiel = -1;
     public long anzahlZüge = 0;
+    private boolean darfIch = false;
     private String Email;
 
     public MyFrame()
     {   
         farbeSpieler.add(new Color(200,0,200));
         farbeSpieler.add(new Color(200,200,0));
-
-        KI = new BilloKI();
+        farbeSpieler.add(new Color(173,216,230));
 
         this.setTitle(progName);
         this.setSize(xMax,yMax);
@@ -85,8 +82,6 @@ public class MyFrame extends JFrame implements ActionListener
         beenden.addActionListener(this);
         showAll = new JMenuItem("Zeige Alle Züge");
         showAll.addActionListener(this);
-        KIBattle = new JMenuItem("KI Kampf");
-        KIBattle.addActionListener(this);
         ChPW = new JMenuItem("Ändere Passwort");
         ChPW.addActionListener(this);
         DelFire = new JMenuItem("Delete FireBaseSave");
@@ -99,7 +94,6 @@ public class MyFrame extends JFrame implements ActionListener
         datei.add(beenden);
         TTT.add(showAll);
         TTT.add(resetOutput);
-        TTT.add(KIBattle);
         TTT.add(DelFire);
         TTT.add(ChPW);
         this.setJMenuBar(menueLeiste);
@@ -148,18 +142,39 @@ public class MyFrame extends JFrame implements ActionListener
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
                                 System.out.println("Event");
-                                /*anzahlZüge = snapshot.getChildrenCount();
-                                System.out.println("There are " + snapshot.child("Feld").getChildrenCount() + " Felder");
-                                if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).exists()){
-                                Feld feld = (snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).getValue(Feld.class));
-                                if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).getValue(Feld.class).spieler() == ich && feld.spieler() == ich){
-                                spieler = du;
+                                for(int i=0;i<625;i++) {
+                                    Buttons.get(i).update(farbeSpieler.get(2));
                                 }
-                                else if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).exists()){
-                                spieler = ich;
+                                for (int i=0; i<5; i++ ) 
+                                {
+                                    for (int j=0;j<5;j++)
+                                    {
+                                        for (int k=0; k<5; k++ ) 
+                                        {
+                                            for(int l=0;l<5;l++){
+                                                toe.Spielfeld[i][j][k][l] = -1;
+                                            }
+                                        }
+                                    }
                                 }
-                                setze(feld);
-                                }*/
+                                toe.Felder.clear();
+                                for(int i=0;i<snapshot.child("Feld").getChildrenCount();i++){
+                                    Feld feld = snapshot.child("Feld").child(""+i).getValue(Feld.class);
+                                    updateButton(feld);
+                                    toe.Felder.add(feld);
+                                }
+                                anzahlZüge = snapshot.child("Feld").getChildrenCount();
+                                if(toe.Felder.size() > 0){String s = toe.click();
+                                    Checker checker = new Checker();
+                                    if(checker.checkWin(toe.Felder,toe.Spielfeld) == 1){
+                                        output.write("Spieler 1 hat gewonnen");
+                                    }
+                                    else if(checker.checkWin(toe.Felder,toe.Spielfeld) == 2){
+                                        output.write("Spieler 2 hat gewonnen");
+                                    }
+                                    if(toe.Felder.get(toe.Felder.size() - 1).spieler() != ich && toe.Felder.size() > 0){darfIch = true;}
+                                }
+                                if(ich == 0 && toe.Felder.size() == 0){darfIch = true;}
                             }
 
                             @Override
@@ -246,17 +261,11 @@ public class MyFrame extends JFrame implements ActionListener
                     }
                 });
         }
-        if (event.getSource() == KIBattle){
-            Checker checker = new Checker();
-            for(int i=0;i<625;i++){
-                setze(KI.setze(toe));
-                if(checker.checkWin(toe.Felder,toe.Spielfeld) != -1){break;}
-            } 
-        }
         for(int i=0;i<625;i++){
             if (event.getSource()==Buttons.get(i)){
-                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && ich == spieler){
-                    fire.child("Feld").child(""+anzahlZüge).setValue(new Feld((i%25)/5,(i%5),(i/25)/5,((i/25)%5),spieler));
+                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && darfIch){
+                    fireSpiel.child("Feld").child(""+anzahlZüge).setValue(new Feld((i%25)/5,(i%5),(i/25)/5,((i/25)%5),ich));
+                    darfIch = false;
                 }
                 else {
                     String s = "Du kannst nicht in das Feld "+(i%25)/5+"|"+(i%5)+"|"+(i/25)/5+"|"+((i/25)%5)+" setzen";
@@ -267,32 +276,6 @@ public class MyFrame extends JFrame implements ActionListener
         } 
     }
 
-    public void setzeButton(Feld feld){
-        Buttons.get((125*feld.C())+(25*feld.D())+(5*feld.A())+feld.B()).update(farbeSpieler.get(spieler));
-        System.out.println("setze Button was called");
-    }
-
-    public void setze(Feld feld){
-        if(toe.check(feld.A(),feld.B(),feld.C(),feld.D())){
-            setzeButton(feld);
-            String s = toe.click(feld);
-            output.writeLine(s);
-        }
-        else {
-            String s = "Du kannst nicht in das Feld "+feld.A()+"|"+feld.B()+"|"+feld.C()+"|"+feld.D()+" setzen";
-            output.write(s);
-            output.newLine();
-        }
-    }
-
-    public int spieler(){
-        return spieler;
-    }
-
-    public void setSpieler(int Neuspieler){
-        fire.child("Spieler").setValue(spieler);
-    }
-
     public void reset(){
         this.setSize(xMax,yMax);
         for(int i=0;i<625;i++) {
@@ -300,5 +283,10 @@ public class MyFrame extends JFrame implements ActionListener
         }
         output.clear();
         toe.reset();
+    }
+
+    public void updateButton(Feld feld){
+        Buttons.get((125*feld.C())+(25*feld.D())+(5*feld.A())+feld.B()).update(farbeSpieler.get(feld.spieler()));
+        System.out.println("setze Button was called");
     }
 } 
