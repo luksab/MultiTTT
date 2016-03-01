@@ -162,15 +162,18 @@ public class MyFrame extends JFrame implements ActionListener
                                     Feld feld = snapshot.child("Feld").child(""+i).getValue(Feld.class);
                                     updateButton(feld);
                                     toe.Felder.add(feld);
+                                    toe.Spielfeld[feld.A()][feld.B()][feld.C()][feld.D()] = feld.spieler();
                                 }
                                 anzahlZüge = snapshot.child("Feld").getChildrenCount();
                                 if(toe.Felder.size() > 0){String s = toe.click();
                                     Checker checker = new Checker();
-                                    if(checker.checkWin(toe.Felder,toe.Spielfeld) == 1){
-                                        output.write("Spieler 1 hat gewonnen");
+                                    int check = checker.checkWin(toe.Felder,toe.Spielfeld);
+                                    System.out.println(check);
+                                    if(check == 0){
+                                        output.writeLine("Spieler 0 hat gewonnen");
                                     }
-                                    else if(checker.checkWin(toe.Felder,toe.Spielfeld) == 2){
-                                        output.write("Spieler 2 hat gewonnen");
+                                    else if(check == 1){
+                                        output.writeLine("Spieler 1 hat gewonnen");
                                     }
                                     if(toe.Felder.get(toe.Felder.size() - 1).spieler() != ich && toe.Felder.size() > 0){darfIch = true;}
                                 }
@@ -263,7 +266,7 @@ public class MyFrame extends JFrame implements ActionListener
         }
         for(int i=0;i<625;i++){
             if (event.getSource()==Buttons.get(i)){
-                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && darfIch){
+                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5))/* && darfIch*/){
                     fireSpiel.child("Feld").child(""+anzahlZüge).setValue(new Feld((i%25)/5,(i%5),(i/25)/5,((i/25)%5),ich));
                     darfIch = false;
                 }
