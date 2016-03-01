@@ -141,41 +141,47 @@ public class MyFrame extends JFrame implements ActionListener
                     fireSpiel.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
-                                System.out.println("Event");
-                                for(int i=0;i<625;i++) {
-                                    Buttons.get(i).update(farbeSpieler.get(2));
-                                }
-                                for (int i=0; i<5; i++ ) 
-                                {
-                                    for (int j=0;j<5;j++)
-                                    {
-                                        for (int k=0; k<5; k++ ) 
-                                        {
-                                            for(int l=0;l<5;l++){
-                                                toe.Spielfeld[i][j][k][l] = -1;
-                                            }
-                                        }
-                                    }
-                                }
-                                toe.Felder.clear();
-                                for(int i=0;i<snapshot.child("Feld").getChildrenCount();i++){
-                                    Feld feld = snapshot.child("Feld").child(""+i).getValue(Feld.class);
+                                if(snapshot.child("Feld").getChildrenCount() +1 == toe.Felder.size()){
+                                    Feld feld = snapshot.child("Feld").child(""+toe.Felder.size()).getValue(Feld.class);
                                     updateButton(feld);
                                     toe.Felder.add(feld);
                                     toe.Spielfeld[feld.A()][feld.B()][feld.C()][feld.D()] = feld.spieler();
+                                    anzahlZüge = snapshot.child("Feld").getChildrenCount();
+                                    if(toe.Felder.size() > 0){String s = toe.click();
+                                        Checker checker = new Checker();
+                                        int check = checker.checkWin(toe.Felder,toe.Spielfeld);
+                                        if(check == 0){
+                                            output.writeLine("Spieler 0 hat gewonnen");
+                                        }
+                                        else if(check == 1){
+                                            output.writeLine("Spieler 1 hat gewonnen");
+                                        }
+                                        if(toe.Felder.get(toe.Felder.size() - 1).spieler() != ich && toe.Felder.size() > 0){darfIch = true;}
+                                    }
                                 }
-                                anzahlZüge = snapshot.child("Feld").getChildrenCount();
-                                if(toe.Felder.size() > 0){String s = toe.click();
-                                    Checker checker = new Checker();
-                                    int check = checker.checkWin(toe.Felder,toe.Spielfeld);
-                                    System.out.println(check);
-                                    if(check == 0){
-                                        output.writeLine("Spieler 0 hat gewonnen");
+                                else{
+                                    for(int i=0;i<625;i++) {
+                                        Buttons.get(i).update(farbeSpieler.get(2));
                                     }
-                                    else if(check == 1){
-                                        output.writeLine("Spieler 1 hat gewonnen");
+                                    for (int i=0; i<5; i++ ) 
+                                    {
+                                        for (int j=0;j<5;j++)
+                                        {
+                                            for (int k=0; k<5; k++ ) 
+                                            {
+                                                for(int l=0;l<5;l++){
+                                                    toe.Spielfeld[i][j][k][l] = -1;
+                                                }
+                                            }
+                                        }
                                     }
-                                    if(toe.Felder.get(toe.Felder.size() - 1).spieler() != ich && toe.Felder.size() > 0){darfIch = true;}
+                                    toe.Felder.clear();
+                                    for(int i=0;i<snapshot.child("Feld").getChildrenCount();i++){
+                                        Feld feld = snapshot.child("Feld").child(""+i).getValue(Feld.class);
+                                        updateButton(feld);
+                                        toe.Felder.add(feld);
+                                        toe.Spielfeld[feld.A()][feld.B()][feld.C()][feld.D()] = feld.spieler();
+                                    }
                                 }
                                 if(ich == 0 && toe.Felder.size() == 0){darfIch = true;}
                             }
@@ -266,7 +272,7 @@ public class MyFrame extends JFrame implements ActionListener
         }
         for(int i=0;i<625;i++){
             if (event.getSource()==Buttons.get(i)){
-                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5))/* && darfIch*/){
+                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && darfIch){
                     fireSpiel.child("Feld").child(""+anzahlZüge).setValue(new Feld((i%25)/5,(i%5),(i/25)/5,((i/25)%5),ich));
                     darfIch = false;
                 }
