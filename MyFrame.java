@@ -152,13 +152,15 @@ public class MyFrame extends JFrame implements ActionListener
                                         int check = checker.checkWin(toe.Felder,toe.Spielfeld);
                                         if(check == 0){
                                             output.writeLine("Spieler 0 hat gewonnen");
+                                            darfIch = false;
                                         }
                                         else if(check == 1){
                                             output.writeLine("Spieler 1 hat gewonnen");
+                                            darfIch = false;
                                         }
-                                        if(toe.Felder.get(toe.Felder.size() - 1).spieler() != ich && toe.Felder.size() > 0){darfIch = true;}
                                     }
                                 }
+                                else if(snapshot.child("Feld").getChildrenCount() == toe.Felder.size()){}
                                 else{
                                     for(int i=0;i<625;i++) {
                                         Buttons.get(i).update(farbeSpieler.get(2));
@@ -176,12 +178,16 @@ public class MyFrame extends JFrame implements ActionListener
                                         }
                                     }
                                     toe.Felder.clear();
+                                    anzahlZüge = snapshot.child("Feld").getChildrenCount();
                                     for(int i=0;i<snapshot.child("Feld").getChildrenCount();i++){
                                         Feld feld = snapshot.child("Feld").child(""+i).getValue(Feld.class);
                                         updateButton(feld);
                                         toe.Felder.add(feld);
                                         toe.Spielfeld[feld.A()][feld.B()][feld.C()][feld.D()] = feld.spieler();
                                     }
+                                }
+                                if(toe.Felder.size() > 0){
+                                    if(toe.Felder.get(toe.Felder.size() - 1).spieler() != ich){darfIch = true;}
                                 }
                                 if(ich == 0 && toe.Felder.size() == 0){darfIch = true;}
                             }
@@ -272,6 +278,7 @@ public class MyFrame extends JFrame implements ActionListener
         }
         for(int i=0;i<625;i++){
             if (event.getSource()==Buttons.get(i)){
+                System.out.println(darfIch);
                 if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && darfIch){
                     fireSpiel.child("Feld").child(""+anzahlZüge).setValue(new Feld((i%25)/5,(i%5),(i/25)/5,((i/25)%5),ich));
                     darfIch = false;
