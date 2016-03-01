@@ -39,11 +39,12 @@ public class MyFrame extends JFrame implements ActionListener
     JMenuItem ChPW;
 
     private Firebase fire;
-    private Firebase fireFeld;
+    private Firebase fireSpiel;
     private int spieler = 0;
     private int ich = -1;
-    private int du ;
+    private int du;
     private int TesteNachSpieler = -1;
+    private int spiel = -1;
     public long anzahlZüge = 0;
     private String Email;
 
@@ -106,7 +107,6 @@ public class MyFrame extends JFrame implements ActionListener
         this.setVisible(true);
 
         fire = new Firebase("https://blistering-fire-5630.firebaseIO.com/");
-        fireFeld = new Firebase("https://blistering-fire-5630.firebaseIO.com/Feld");
 
         fire.authWithPassword(Login[0], Login[1], new Firebase.AuthResultHandler() {
                 @Override
@@ -122,54 +122,51 @@ public class MyFrame extends JFrame implements ActionListener
                 }
             });
 
-        //reset Feld
-        fire.child("Feld").setValue(null);
-
         //eventListener           
-
-        fireFeld.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    anzahlZüge = snapshot.getChildrenCount();
-                    System.out.println("There are " + snapshot.child("Feld").getChildrenCount() + " Felder");
-                    if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).exists()){
-                        Feld feld = (snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).getValue(Feld.class));
-                        if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).getValue(Feld.class).spieler() == ich && feld.spieler() == ich){
-                            spieler = du;
-                        }
-                        else if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).exists()){
-                            spieler = ich;
-                        }
-                        setze(feld);
-                    }
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-                    System.out.println("The read failed: " + firebaseError.getMessage());
-                }
-            });
 
         //listen Once
         fire.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
-                    System.out.println("Listen Once Called");
-                    if(snapshot.child("SpielerAnzahl").getValue(int.class) == 0){
-                        output.writeLine("Du bist Spieler 1");
-                        ich = 0;
-                        du  = 1;
-                        fire.child("SpielerAnzahl").setValue(1);
+                    boolean breaking = false;
+                    for(int i=0;i<snapshot.child("Spiele").getChildrenCount()+1;i++){
+                        for(int j=0;j<2;j++){
+                            if(snapshot.child("Spiele").child(""+i).child("Spieler "+j).getValue() == null){
+                                System.out.println("I:"+i);
+                                fireSpiel = new Firebase("https://blistering-fire-5630.firebaseIO.com/Spiele/"+i);
+                                fireSpiel.child("Spieler "+j).setValue(Email);
+                                ich = j;
+                                spiel=i;
+                                breaking = true;
+                                break;
+                            }
+                        }
+                        if(breaking){break;}
                     }
-                    if(snapshot.child("SpielerAnzahl").getValue(int.class) == 1){
-                        output.writeLine("Du bist Spieler 2");
-                        ich = 1;
-                        du  = 0;
-                        fire.child("SpielerAnzahl").setValue(2);
-                    }
-                    if(snapshot.child("SpielerAnzahl").getValue(int.class) == 2){
-                        output.writeLine("Das Spiel ist voll");
-                    }
+                    output.writeLine("Du bist im Spiel "+spiel+", als Spieler "+ich+" gelandet.");
+                    fireSpiel.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                System.out.println("Event");
+                                /*anzahlZüge = snapshot.getChildrenCount();
+                                System.out.println("There are " + snapshot.child("Feld").getChildrenCount() + " Felder");
+                                if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).exists()){
+                                Feld feld = (snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).getValue(Feld.class));
+                                if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).getValue(Feld.class).spieler() == ich && feld.spieler() == ich){
+                                spieler = du;
+                                }
+                                else if(snapshot.child(String.valueOf(snapshot.getChildrenCount() - 1)).exists()){
+                                spieler = ich;
+                                }
+                                setze(feld);
+                                }*/
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                                System.out.println("The read failed: " + firebaseError.getMessage());
+                            }
+                        });
                 }
 
                 @Override
