@@ -28,11 +28,9 @@ public class MyFrame extends JFrame implements ActionListener
     JMenuBar menueLeiste;
     JMenu datei;
     JMenu TTT;
-    JMenuItem reset;
     JMenuItem beenden;
     JMenuItem showAll;
     JMenuItem resetOutput;
-    JMenuItem DelFire;
     JMenuItem ChPW;
 
     private Firebase fire;
@@ -44,7 +42,10 @@ public class MyFrame extends JFrame implements ActionListener
     private int spiel = -1;
     public long anzahlZüge = 0;
     private boolean darfIch = false;
+    private boolean SpielZuende = false;
     private String Email;
+    private String SpielerIch;
+    private String SpielerDu;
 
     public MyFrame()
     {   
@@ -76,25 +77,19 @@ public class MyFrame extends JFrame implements ActionListener
         menueLeiste = new JMenuBar();
         datei = new JMenu("Datei");
         TTT = new JMenu("TTT");
-        reset = new JMenuItem("reset");
-        reset.addActionListener(this);
         beenden = new JMenuItem("beenden");
         beenden.addActionListener(this);
         showAll = new JMenuItem("Zeige Alle Züge");
         showAll.addActionListener(this);
         ChPW = new JMenuItem("Ändere Passwort");
         ChPW.addActionListener(this);
-        DelFire = new JMenuItem("Delete FireBaseSave");
-        DelFire.addActionListener(this);
         resetOutput = new JMenuItem("reset Ausgabe");
         resetOutput.addActionListener(this);
         menueLeiste.add(datei);
         menueLeiste.add(TTT);
-        datei.add(reset);
         datei.add(beenden);
         TTT.add(showAll);
         TTT.add(resetOutput);
-        TTT.add(DelFire);
         TTT.add(ChPW);
         this.setJMenuBar(menueLeiste);
 
@@ -130,6 +125,12 @@ public class MyFrame extends JFrame implements ActionListener
                                 fireSpiel = new Firebase("https://blistering-fire-5630.firebaseIO.com/Spiele/"+i);
                                 fireSpiel.child("Spieler "+j).setValue(Email);
                                 ich = j;
+                                if(ich == 0){
+                                    du  = 1;
+                                }
+                                else{ 
+                                    du = 0;
+                                }
                                 spiel=i;
                                 breaking = true;
                                 break;
@@ -141,21 +142,18 @@ public class MyFrame extends JFrame implements ActionListener
                     fireSpiel.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
-                                if(snapshot.child("Feld").getChildrenCount() +1 == toe.Felder.size()){
+                                SpielerIch = snapshot.child("Spieler "+ich).getValue(String.class);
+                                SpielerDu = snapshot.child("Spieler "+du).getValue(String.class);
+                                if(toe.Felder.size() +1 == snapshot.child("Feld").getChildrenCount()){
                                     Feld feld = snapshot.child("Feld").child(""+toe.Felder.size()).getValue(Feld.class);
                                     updateButton(feld);
                                     toe.Felder.add(feld);
                                     toe.Spielfeld[feld.A()][feld.B()][feld.C()][feld.D()] = feld.spieler();
                                     anzahlZüge = snapshot.child("Feld").getChildrenCount();
-                                    if(toe.Felder.size() > 0){String s = toe.click();
-                                        Checker checker = new Checker();
-                                        int check = checker.checkWin(toe.Felder,toe.Spielfeld);
-                                        if(check == 0){
-                                            output.writeLine("Spieler 0 hat gewonnen");
-                                            darfIch = false;
-                                        }
-                                        else if(check == 1){
-                                            output.writeLine("Spieler 1 hat gewonnen");
+                                    if(toe.Felder.size() > 0){
+                                        output.writeLine(toe.click());
+                                        if(toe.checkWin()){
+                                            SpielZuende = true;
                                             darfIch = false;
                                         }
                                     }
@@ -245,12 +243,13 @@ public class MyFrame extends JFrame implements ActionListener
 
     public void actionPerformed(ActionEvent event)
     {        
-        if (event.getSource() == reset){
-            fire.setValue(null);
-            reset();
-        }
         if (event.getSource() == beenden){
-            fire.setValue(null);
+            if(SpielerDu == "Leer"){
+                fireSpiel.setValue(null);
+            }
+            else{
+                fireSpiel.child("Spieler "+ich).setValue("Leer");
+            }
             this.dispose();
         }
         if (event.getSource() == showAll){
@@ -258,9 +257,6 @@ public class MyFrame extends JFrame implements ActionListener
         }
         if (event.getSource() == resetOutput){
             output.clear();
-        }
-        if (event.getSource() == DelFire){
-            fire.setValue(null);
         }
         if (event.getSource() == ChPW){
             String[] PW = PasswdChangeBox();
@@ -278,8 +274,7 @@ public class MyFrame extends JFrame implements ActionListener
         }
         for(int i=0;i<625;i++){
             if (event.getSource()==Buttons.get(i)){
-                System.out.println(darfIch);
-                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && darfIch){
+                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && darfIch && !SpielZuende){
                     fireSpiel.child("Feld").child(""+anzahlZüge).setValue(new Feld((i%25)/5,(i%5),(i/25)/5,((i/25)%5),ich));
                     darfIch = false;
                 }
