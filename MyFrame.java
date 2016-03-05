@@ -131,6 +131,12 @@ public class MyFrame extends JFrame implements ActionListener
                                 else{ 
                                     du = 0;
                                 }
+                                if(snapshot.child("Spieler "+du).exists()){
+                                    SpielerDu = snapshot.child("Spieler "+du).getValue(String.class);
+                                }
+                                else{
+                                    SpielerDu = "Leer";
+                                }
                                 spiel=i;
                                 breaking = true;
                                 break;
