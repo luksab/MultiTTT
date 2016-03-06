@@ -10,7 +10,7 @@ public class MyFrame extends JFrame implements ActionListener
     final int xMax = 1345;
     final int yMax = 990;
     final int dxy = 10;
-
+    
     final int xMitte = 925;
     final int breiteLinks = 200 - 2*dxy;
     final int breiteRechts = 400 - 2*dxy;
