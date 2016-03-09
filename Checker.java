@@ -6,7 +6,7 @@ public class Checker
 
     }
 
-    public int checkWin(ArrayList<Feld> Felder,int[][][][] Spielfeld){
+    public int checkWin(ArrayList<Feld> Felder, TicTacToe toe){
         int gewonnen = -1;
         for(int sp = 0; sp < 2; sp++){
             for(int j=0; j<40 ; j++){
@@ -47,7 +47,7 @@ public class Checker
                             else{Dp = 4;}
                             int zaehler = 0;
                             for(int k=0;k<5;k++){
-                                if(Spielfeld[Ap][Bp][Cp][Dp] == sp){
+                                if(toe.Spielfeld(Ap,Bp,Cp,Dp) == sp){
                                     zaehler ++;
                                 }
                                 Ap += Ad;

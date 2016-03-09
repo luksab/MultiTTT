@@ -10,7 +10,7 @@ public class MyFrame extends JFrame implements ActionListener
     final int xMax = 1345;
     final int yMax = 990;
     final int dxy = 10;
-    
+
     final int xMitte = 925;
     final int breiteLinks = 200 - 2*dxy;
     final int breiteRechts = 400 - 2*dxy;
@@ -32,6 +32,7 @@ public class MyFrame extends JFrame implements ActionListener
     JMenuItem showAll;
     JMenuItem resetOutput;
     JMenuItem ChPW;
+    JMenuItem DelFire;
 
     private Firebase fire;
     private Firebase fireSpiel;
@@ -43,6 +44,7 @@ public class MyFrame extends JFrame implements ActionListener
     public long anzahlZüge = 0;
     private boolean darfIch = false;
     private boolean SpielZuende = false;
+    private boolean angemeldet = false;
     private String Email;
     private String SpielerIch;
     private String SpielerDu;
@@ -77,6 +79,8 @@ public class MyFrame extends JFrame implements ActionListener
         menueLeiste = new JMenuBar();
         datei = new JMenu("Datei");
         TTT = new JMenu("TTT");
+        DelFire = new JMenuItem("DelFire");
+        DelFire.addActionListener(this);
         beenden = new JMenuItem("beenden");
         beenden.addActionListener(this);
         showAll = new JMenuItem("Zeige Alle Züge");
@@ -88,6 +92,7 @@ public class MyFrame extends JFrame implements ActionListener
         menueLeiste.add(datei);
         menueLeiste.add(TTT);
         datei.add(beenden);
+        datei.add(DelFire);
         TTT.add(showAll);
         TTT.add(resetOutput);
         TTT.add(ChPW);
@@ -102,6 +107,7 @@ public class MyFrame extends JFrame implements ActionListener
                 public void onAuthenticated(AuthData authData) {
                     System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
                     Email = ""+authData.getProviderData().get("email");
+                    angemeldet = true;
                 }
 
                 @Override
@@ -116,7 +122,14 @@ public class MyFrame extends JFrame implements ActionListener
         //listen Once
         fire.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot snapshot) {
+                public void onDataChange(DataSnapshot snapshot) /*InterruptedException*/ {
+                    try {
+                        while(!angemeldet)
+                            Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        System.out.println("Thread.sleep(50); ist kaputt, weil "+e.getMessage());
+                    }
+
                     boolean breaking = false;
                     for(int i=0;i<snapshot.child("Spiele").getChildrenCount()+1;i++){
                         for(int j=0;j<2;j++){
@@ -154,7 +167,6 @@ public class MyFrame extends JFrame implements ActionListener
                                     Feld feld = snapshot.child("Feld").child(""+toe.Felder.size()).getValue(Feld.class);
                                     updateButton(feld);
                                     toe.Felder.add(feld);
-                                    toe.Spielfeld[feld.A()][feld.B()][feld.C()][feld.D()] = feld.spieler();
                                     anzahlZüge = snapshot.child("Feld").getChildrenCount();
                                     if(toe.Felder.size() > 0){
                                         output.writeLine(toe.click());
@@ -169,25 +181,12 @@ public class MyFrame extends JFrame implements ActionListener
                                     for(int i=0;i<625;i++) {
                                         Buttons.get(i).update(farbeSpieler.get(2));
                                     }
-                                    for (int i=0; i<5; i++ ) 
-                                    {
-                                        for (int j=0;j<5;j++)
-                                        {
-                                            for (int k=0; k<5; k++ ) 
-                                            {
-                                                for(int l=0;l<5;l++){
-                                                    toe.Spielfeld[i][j][k][l] = -1;
-                                                }
-                                            }
-                                        }
-                                    }
                                     toe.Felder.clear();
                                     anzahlZüge = snapshot.child("Feld").getChildrenCount();
                                     for(int i=0;i<snapshot.child("Feld").getChildrenCount();i++){
                                         Feld feld = snapshot.child("Feld").child(""+i).getValue(Feld.class);
                                         updateButton(feld);
                                         toe.Felder.add(feld);
-                                        toe.Spielfeld[feld.A()][feld.B()][feld.C()][feld.D()] = feld.spieler();
                                     }
                                 }
                                 if(toe.Felder.size() > 0){
@@ -210,6 +209,10 @@ public class MyFrame extends JFrame implements ActionListener
             });
 
     } 
+    
+    public void löscheFirebase(){
+        fire.setValue(null);
+    }
 
     public String[] LoginBox(){
         JTextField EMail = new JTextField();
