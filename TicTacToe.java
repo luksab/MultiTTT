@@ -9,7 +9,7 @@ public class TicTacToe
 
     public int Spielfeld(int A,int B,int C,int D){
         for(int i=0;i<Felder.size();i++){
-            if(Felder.get(i).A() == A && Felder.get(i).B() == B && Felder.get(i).C() == C && Felder.get(i).D() == D){
+            if(Felder.get(i).gC(0) == A && Felder.get(i).gC(1) == B && Felder.get(i).gC(2) == C && Felder.get(i).gC(3) == D){
                 return Felder.get(i).spieler();
             }
         }
@@ -18,7 +18,7 @@ public class TicTacToe
     
     public int Spielfeld(Feld feld){
         for(int i=0;i<Felder.size();i++){
-            if(Felder.get(i).A() == feld.A() && Felder.get(i).B() == feld.B() && Felder.get(i).C() == feld.C() && Felder.get(i).D() == feld.D()){
+            if(Felder.get(i).gC(0) == feld.gC(0) && Felder.get(i).gC(1) == feld.gC(1) && Felder.get(i).gC(2) == feld.gC(2) && Felder.get(i).gC(3) == feld.gC(3)){
                 return Felder.get(i).spieler();
             }
         }
@@ -49,7 +49,7 @@ public class TicTacToe
             s = "Spieler "+feld.spieler()+" hat gewonnen!";
         }
         else{
-            s = "Spieler "+feld.spieler()+" hat auf das Feld "+feld.A()+"|"+feld.B()+"|"+feld.C()+"|"+feld.D()+" gesetzt";
+            s = "Spieler "+feld.spieler()+" hat auf das Feld "+feld.gC(0)+"|"+feld.gC(1)+"|"+feld.gC(2)+"|"+feld.gC(3)+" gesetzt";
         }
         return s;
     }

@@ -284,7 +284,12 @@ public class MyFrame extends JFrame implements ActionListener
         for(int i=0;i<625;i++){
             if (event.getSource()==Buttons.get(i)){
                 if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && darfIch && !SpielZuende){
-                    fireSpiel.child("Feld").child(""+anzahlZüge).setValue(new Feld((i%25)/5,(i%5),(i/25)/5,((i/25)%5),ich));
+                    ArrayList<Integer> Koord = new ArrayList<Integer>();
+                    Koord.add((i%25)/5);
+                    Koord.add(i%5);
+                    Koord.add((i/25)/5);
+                    Koord.add((i/25)%5);
+                    fireSpiel.child("Feld").child(""+anzahlZüge).setValue(new Feld (Koord,ich));
                     darfIch = false;
                 }
                 else {
@@ -306,7 +311,7 @@ public class MyFrame extends JFrame implements ActionListener
     }
 
     public void updateButton(Feld feld){
-        Buttons.get((125*feld.C())+(25*feld.D())+(5*feld.A())+feld.B()).update(farbeSpieler.get(feld.spieler()));
+        Buttons.get((125*feld.gC(2))+(25*feld.gC(3))+(5*feld.gC(0))+feld.gC(1)).update(farbeSpieler.get(feld.spieler()));
         System.out.println("setze Button was called");
     }
 } 
