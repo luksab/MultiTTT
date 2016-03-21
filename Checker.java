@@ -1,4 +1,5 @@
 import java.util.*;
+import java.lang.Math;
 public class Checker
 {
     public Checker()
@@ -16,8 +17,8 @@ public class Checker
                 int[] D = new int[Felder.get(0).getK().size()];
 
                 for (int i=0;i<Dim;i++){
-                    if( (j/(3^i)) % 3 == 0){P[i] = 0;D[i] = 1;}
-                    else if((j/(3^i))%3==1){P[i] = letztesFeld.gC(1);D[i] = 0;}
+                    if( (j/Math.pow(3,i)) % 3 == 0){P[i] = 0;D[i] = 1;}
+                    else if((j/Math.pow(3,i))%3==1){P[i] = letztesFeld.gC(1);D[i] = 0;}
                     else{P[i] = 4;D[i] = -1;}
                 }
                 int Ap,Ad, Bp,Bd, Cp,Cd, Dp,Dd;
