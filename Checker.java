@@ -10,7 +10,7 @@ java.io.Serializable
     }
 
     public void witeToTXT(ArrayList<String> text) throws IOException{
-        FileWriter write = new FileWriter("C\t.txt");
+        FileWriter write = new FileWriter("C:/Users/lukas/Desktop/t.txt");
         PrintWriter print_line = new PrintWriter(write);
         for(int i=0;i<text.size();i++){
             print_line.printf("%s"+"%n",text.get(i));
@@ -32,7 +32,7 @@ java.io.Serializable
                 for (int i=0;i<Dim;i++){
                     text.add("%: "+(j/(int)(Math.pow(3,i))) % 3);
                     if( (j/(int)(Math.pow(3,i))) % 3 == 0){P[i] = 0;D[i] = 1;}
-                    else if((j/(int)(Math.pow(3,i)))%3==1){P[i] = letztesFeld.gC(1);D[i] = 0;}
+                    else if((j/(int)(Math.pow(3,i)))%3==1){P[i] = letztesFeld.gC(i);D[i] = 0;}
                     else{P[i] = 4;D[i] = -1;}
                 }
                 int Ap,Ad, Bp,Bd, Cp,Cd, Dp,Dd;
@@ -76,7 +76,7 @@ java.io.Serializable
 
                             for (int m=0;m<Dim;m++){
                                 if( (j/(int)(Math.pow(3,m))) % 3 == 0){P[m] = 0;}
-                                else if((j/(int)(Math.pow(3,m)))%3==1){P[m] = letztesFeld.gC(1);}
+                                else if((j/(int)(Math.pow(3,m)))%3==1){P[m] = letztesFeld.gC(m);}
                                 else{P[m] = 4;}
                             }
                             int zaehler = 0;
@@ -100,7 +100,9 @@ java.io.Serializable
         }
         try{
             witeToTXT(text);}
-        catch(Exception e){}
+        catch(Exception e){
+        System.out.println(""+e);
+        }
         return gewonnen;
     }
 }
