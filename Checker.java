@@ -1,24 +1,36 @@
 import java.util.*;
 import java.lang.Math;
-public class Checker
+import java.io.*;
+public class Checker implements
+java.io.Serializable
 {
     public Checker()
     {
 
     }
 
+    public void witeToTXT(ArrayList<String> text) throws IOException{
+        FileWriter write = new FileWriter("C\t.txt");
+        PrintWriter print_line = new PrintWriter(write);
+        for(int i=0;i<text.size();i++){
+            print_line.printf("%s"+"%n",text.get(i));
+        }
+        print_line.close();
+    }
+
     public int checkWin(ArrayList<Feld> Felder, TicTacToe toe){
         int gewonnen = -1;
         int Dim = Felder.get(0).getK().size();
+        ArrayList<String> text = new ArrayList<String>();
         for(int sp = 0; sp < 2; sp++){
             for(int j=0; j<40 ; j++){
                 Feld letztesFeld = Felder.get(Felder.size()-1);
                 int[] P = new int[Felder.get(0).getK().size()];
                 int[] D = new int[Felder.get(0).getK().size()];
 
-                System.out.println("j="+j);
+                text.add("j: "+j);
                 for (int i=0;i<Dim;i++){
-                    System.out.println("komplett="+(j/(int)(Math.pow(3,i))) % 3);
+                    text.add("%: "+(j/(int)(Math.pow(3,i))) % 3);
                     if( (j/(int)(Math.pow(3,i))) % 3 == 0){P[i] = 0;D[i] = 1;}
                     else if((j/(int)(Math.pow(3,i)))%3==1){P[i] = letztesFeld.gC(1);D[i] = 0;}
                     else{P[i] = 4;D[i] = -1;}
@@ -39,7 +51,6 @@ public class Checker
                 else if(j%3 == 1){Dp = letztesFeld.gC(3);Dd = 0;}
                 else{Dp = 4;Dd = -1;}
 
-                //kdfhkuhdf
                 /*
                 if((j/27)%3 == 0){P[0] = 0;D[0] = 1;}
                 else{P[0] = letztesFeld.gC(0);D[0] = 0;}
@@ -87,6 +98,9 @@ public class Checker
                 }
             }
         }
+        try{
+            witeToTXT(text);}
+        catch(Exception e){}
         return gewonnen;
     }
 }
