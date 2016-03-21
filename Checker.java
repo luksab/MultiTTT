@@ -36,6 +36,23 @@ public class Checker
                 if(j%3 == 0){Dp = 0;Dd = 1;}
                 else if(j%3 == 1){Dp = letztesFeld.gC(3);Dd = 0;}
                 else{Dp = 4;Dd = -1;}
+                
+                //kdfhkuhdf
+
+                if((j/27)%3 == 0){P[0] = 0;D[0] = 1;}
+                else{P[0] = letztesFeld.gC(0);D[0] = 0;}
+
+                if((j/9)%3 == 0){P[1] = 0;D[1] = 1;}
+                else if((j/9) % 3 == 1){P[1] = letztesFeld.gC(1);D[1] = 0;}
+                else{P[1] = 4;D[1] = -1;}
+
+                if((j/3)%3 == 0){P[2] = 0;D[2] = 1;}
+                else if((j/3)%3 == 1){P[2] = letztesFeld.gC(2);D[2] = 0;}
+                else{P[2] = 4;D[2] = -1;}
+
+                if(j%3 == 0){P[3] = 0;D[3] = 1;}
+                else if(j%3 == 1){P[3] = letztesFeld.gC(3);D[3] = 0;}
+                else{P[3] = 4;D[3] = -1;}
 
                 for(int i=0; i<Felder.size() -1;i++){
                     if(Felder.get(Felder.size() -1).spieler() == sp){
@@ -50,20 +67,20 @@ public class Checker
                                 else{P[m] = 4;}
                             }
 
-                            if((j/27)%3 == 0){Ap = 0;}
-                            else{Ap = letztesFeld.gC(0);}
+                            if((j/27)%3 == 0){P[0] = 0;}
+                            else{P[0] = letztesFeld.gC(0);}
 
-                            if((j/9)%3 == 0){Bp = 0;}
-                            else if((j/9) % 3 == 1){Bp = letztesFeld.gC(1);}
-                            else{Bp = 4;}
+                            if((j/9)%3 == 0){P[1] = 0;}
+                            else if((j/9) % 3 == 1){P[1] = letztesFeld.gC(1);}
+                            else{P[1] = 4;}
 
-                            if((j/3)%3 == 0){Cp = 0;}
-                            else if((j/3)%3 == 1){Cp = letztesFeld.gC(2);}
-                            else{Cp = 4;}
+                            if((j/3)%3 == 0){P[2] = 0;}
+                            else if((j/3)%3 == 1){P[2] = letztesFeld.gC(2);}
+                            else{P[2] = 4;}
 
-                            if(j%3 == 0){Dp = 0;}
-                            else if(j%3 == 1){Dp = letztesFeld.gC(3);}
-                            else{Dp = 4;}
+                            if(j%3 == 0){P[3] = 0;}
+                            else if(j%3 == 1){P[3] = letztesFeld.gC(3);}
+                            else{P[3] = 4;}
                             int zaehler = 0;
                             for(int k=0;k<5;k++){
                                 if(toe.Spielfeld(P[0],P[1],P[2],P[3]) == sp){
