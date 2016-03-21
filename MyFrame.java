@@ -187,6 +187,13 @@ public class MyFrame extends JFrame implements ActionListener
                                         Feld feld = snapshot.child("Feld").child(""+i).getValue(Feld.class);
                                         updateButton(feld);
                                         toe.Felder.add(feld);
+                                        if(toe.Felder.size() > 0){
+                                            output.writeLine(toe.click());
+                                            if(toe.checkWin()){
+                                                SpielZuende = true;
+                                                darfIch = false;
+                                            }
+                                        }
                                     }
                                 }
                                 if(toe.Felder.size() > 0){
@@ -209,7 +216,7 @@ public class MyFrame extends JFrame implements ActionListener
             });
 
     } 
-    
+
     public void löscheFirebase(){
         fire.setValue(null);
     }
