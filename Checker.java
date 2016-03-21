@@ -16,10 +16,11 @@ public class Checker
                 int[] P = new int[Felder.get(0).getK().size()];
                 int[] D = new int[Felder.get(0).getK().size()];
 
+                System.out.println("j="+j);
                 for (int i=0;i<Dim;i++){
-                    System.out.println("0?"+(j/Math.pow(3,i)) % 3);
-                    if( (j/Math.pow(3,i)) % 3 == 0){P[i] = 0;D[i] = 1;}
-                    else if((j/Math.pow(3,i))%3==1){P[i] = letztesFeld.gC(1);D[i] = 0;}
+                    System.out.println("komplett="+(j/(int)(Math.pow(3,i))) % 3);
+                    if( (j/(int)(Math.pow(3,i))) % 3 == 0){P[i] = 0;D[i] = 1;}
+                    else if((j/(int)(Math.pow(3,i)))%3==1){P[i] = letztesFeld.gC(1);D[i] = 0;}
                     else{P[i] = 4;D[i] = -1;}
                 }
                 int Ap,Ad, Bp,Bd, Cp,Cd, Dp,Dd;
@@ -37,9 +38,9 @@ public class Checker
                 if(j%3 == 0){Dp = 0;Dd = 1;}
                 else if(j%3 == 1){Dp = letztesFeld.gC(3);Dd = 0;}
                 else{Dp = 4;Dd = -1;}
-                
-                //kdfhkuhdf
 
+                //kdfhkuhdf
+                /*
                 if((j/27)%3 == 0){P[0] = 0;D[0] = 1;}
                 else{P[0] = letztesFeld.gC(0);D[0] = 0;}
 
@@ -53,7 +54,7 @@ public class Checker
 
                 if(j%3 == 0){P[3] = 0;D[3] = 1;}
                 else if(j%3 == 1){P[3] = letztesFeld.gC(3);D[3] = 0;}
-                else{P[3] = 4;D[3] = -1;}
+                else{P[3] = 4;D[3] = -1;}*/
 
                 for(int i=0; i<Felder.size() -1;i++){
                     if(Felder.get(Felder.size() -1).spieler() == sp){
@@ -63,25 +64,10 @@ public class Checker
                         letztesFeld.gC(2) - D[2] == Felder.get(i).gC(2) && letztesFeld.gC(3) - D[3] == Felder.get(i).gC(3)){
 
                             for (int m=0;m<Dim;m++){
-                                if( (j/Math.pow(3,m)) % 3 == 0){P[m] = 0;}
-                                else if((j/Math.pow(3,m))%3==1){P[m] = letztesFeld.gC(1);}
+                                if( (j/(int)(Math.pow(3,m))) % 3 == 0){P[m] = 0;}
+                                else if((j/(int)(Math.pow(3,m)))%3==1){P[m] = letztesFeld.gC(1);}
                                 else{P[m] = 4;}
                             }
-
-                            if((j/27)%3 == 0){P[0] = 0;}
-                            else{P[0] = letztesFeld.gC(0);}
-
-                            if((j/9)%3 == 0){P[1] = 0;}
-                            else if((j/9) % 3 == 1){P[1] = letztesFeld.gC(1);}
-                            else{P[1] = 4;}
-
-                            if((j/3)%3 == 0){P[2] = 0;}
-                            else if((j/3)%3 == 1){P[2] = letztesFeld.gC(2);}
-                            else{P[2] = 4;}
-
-                            if(j%3 == 0){P[3] = 0;}
-                            else if(j%3 == 1){P[3] = letztesFeld.gC(3);}
-                            else{P[3] = 4;}
                             int zaehler = 0;
                             for(int k=0;k<5;k++){
                                 if(toe.Spielfeld(P[0],P[1],P[2],P[3]) == sp){
