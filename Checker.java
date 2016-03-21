@@ -45,8 +45,8 @@ public class Checker
                         letztesFeld.gC(2) - D[2] == Felder.get(i).gC(2) && letztesFeld.gC(3) - D[3] == Felder.get(i).gC(3)){
 
                             for (int m=0;m<Dim;m++){
-                                if( (j/(3^m)) % 3 == 0){P[m] = 0;}
-                                else if((j/(3^m))%3==1){P[m] = letztesFeld.gC(1);}
+                                if( (j/Math.pow(3,m)) % 3 == 0){P[m] = 0;}
+                                else if((j/Math.pow(3,m))%3==1){P[m] = letztesFeld.gC(1);}
                                 else{P[m] = 4;}
                             }
 
