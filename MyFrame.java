@@ -5,14 +5,7 @@ import java.util.*;
 
 public class MyFrame extends JFrame implements ActionListener
 {
-    final int xMax = 1345;
-    final int yMax = 990;
     final int dxy = 10;
-
-    final int xMitte = 925;
-    final int breiteLinks = 200 - 2*dxy;
-    final int breiteRechts = 400 - 2*dxy;
-    final int hoeheRechts = 930 - 2*dxy;
 
     final String progName = "TicTacToe";
     final Color farbeHintergrund = new Color(200,200,200);
@@ -42,33 +35,61 @@ public class MyFrame extends JFrame implements ActionListener
     private String Email;
     private String SpielerIch;
     private String SpielerDu;
+    private JScrollPane scroll;
+    private JPanel workspace;
+    private int width;
+    private int height;
+
+    private int xMax;
+    private int yMax;
+    private int xMitte;
+    private int breiteLinks = 200 - 2*dxy;
+    private int breiteRechts;
+    private int hoeheRechts;
 
     public MyFrame()
     {   
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        width = gd.getDisplayMode().getWidth();
+        height = gd.getDisplayMode().getHeight()-50;
+        xMax = width;
+        breiteRechts = 390;
+        yMax = height - (50+dxy);
+        xMitte = xMax - (breiteRechts+dxy+dxy);
+        hoeheRechts = yMax;
+        
         farbeSpieler.add(new Color(200,0,200));
         farbeSpieler.add(new Color(200,200,0));
         farbeSpieler.add(new Color(173,216,230));
 
         this.setTitle(progName);
-        this.setSize(xMax,yMax);
-        this.setLocation(35,35);
+        this.setSize(width,height);
+        this.setLocation(0,0);
         Container cp;
         cp = getContentPane();
         cp.setLayout(null);
         cp.setBackground(farbeHintergrund);
 
         output = new MyScrollingTextArea("Ausgabe");
-        output.setLocation(xMitte + dxy,dxy);
+        output.setLocation(xMitte,0);
         output.setSize(breiteRechts,hoeheRechts); 
         cp.add(output);
+
+        JPanel workspace = new JPanel(null);
+        workspace.setBounds(0,0, 935, 935);
+        workspace.setPreferredSize(new Dimension(935,935));
 
         toe = new TicTacToe(this);
 
         for(int i=0;i<625;i++) {
             Buttons.add(new MyButton(dxy + (35*(i/25)+(10*(int)((i/25)/5))),dxy + (35*(i%25)+(10*(int)((i%25)/5))),30,30));
             Buttons.get(i).addActionListener(this);
-            this.add(Buttons.get(i));
+            workspace.add(Buttons.get(i));
         }
+
+        scroll = new JScrollPane(workspace);
+        scroll.setSize(xMitte,yMax);
+        cp.add(scroll);
 
         menueLeiste = new JMenuBar();
         datei = new JMenu("Datei");
@@ -163,6 +184,5 @@ public class MyFrame extends JFrame implements ActionListener
         Buttons.get((125*feld.gC(2))+(25*feld.gC(3))+(5*feld.gC(0))+feld.gC(1)).update(
             farbeSpieler.get(
                 feld.spieler()));
-        System.out.println("setze Button was called");
     }
 } 
