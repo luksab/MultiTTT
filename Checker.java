@@ -41,10 +41,9 @@ java.io.Serializable
                                 if(toe.Spielfeld(P[0],P[1],P[2],P[3]) == sp){
                                     zaehler ++;
                                 }
-                                P[0] += D[0];
-                                P[1] += D[1];
-                                P[2] += D[2];
-                                P[3] += D[3];
+                                for(int m=0;m<=Dim;m++){
+                                    P[m] += D[m];
+                                }
                             }
                             if(zaehler == 5)
                             {
