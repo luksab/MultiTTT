@@ -15,10 +15,15 @@ public class TicTacToe
         }
         return -1;
     }
-    
+
     public int Spielfeld(Feld feld){
         for(int i=0;i<Felder.size();i++){
-            if(Felder.get(i).gC(0) == feld.gC(0) && Felder.get(i).gC(1) == feld.gC(1) && Felder.get(i).gC(2) == feld.gC(2) && Felder.get(i).gC(3) == feld.gC(3)){
+            int zähler = 0;
+            for(int j=0;j<Felder.get(i).getK().size();j++){
+                if(Felder.get(i).gC(j) == feld.gC(j))
+                    zähler++;
+            }
+            if(zähler == Felder.get(i).getK().size()){
                 return Felder.get(i).spieler();
             }
         }
@@ -30,7 +35,16 @@ public class TicTacToe
     }
 
     public boolean check(int A,int B,int C,int D){
-        if(A < 5 && B < 5 && C < 5 && D < 5 && Spielfeld(A,B,C,D) == -1){
+        if(Spielfeld(A,B,C,D) == -1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean check(Feld feld){
+        if(Spielfeld(feld) == -1){
             return true;
         }
         else{
