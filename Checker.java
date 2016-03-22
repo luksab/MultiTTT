@@ -1,5 +1,8 @@
 import java.util.*;
-public class Checker
+import java.lang.Math;
+import java.io.*;
+public class Checker implements
+java.io.Serializable
 {
     public Checker()
     {
@@ -8,57 +11,54 @@ public class Checker
 
     public int checkWin(ArrayList<Feld> Felder, TicTacToe toe){
         int gewonnen = -1;
+        int Dim = Felder.get(0).getK().size();
         for(int sp = 0; sp < 2; sp++){
-            for(int j=0; j<40 ; j++){
+            for(int j=0; j<(int)(Math.pow(3,Dim-1)/2)+Math.pow(3,Dim-1) ; j++){
                 Feld letztesFeld = Felder.get(Felder.size()-1);
-                int Ap,Ad, Bp,Bd, Cp,Cd, Dp,Dd;
-                if((j/27)%3 == 0){Ap = 0;Ad = 1;}
-                else{Ap = letztesFeld.gC(0);Ad = 0;}
+                int[] P = new int[Felder.get(0).getK().size()];
+                int[] D = new int[Felder.get(0).getK().size()];
 
-                if((j/9)%3 == 0){Bp = 0;Bd = 1;}
-                else if((j/9) % 3 == 1){Bp = letztesFeld.gC(1);Bd = 0;}
-                else{Bp = 4;Bd = -1;}
+                for (int i=0;i<Dim;i++){
+                    if( (j/(int)(Math.pow(3,i))) % 3 == 0){P[i] = 0;D[i] = 1;}
+                    else if((j/(int)(Math.pow(3,i)))%3==1){P[i] = letztesFeld.gC(i);D[i] = 0;}
+                    else{P[i] = Dim;D[i] = -1;}
+                }
 
-                if((j/3)%3 == 0){Cp = 0;Cd = 1;}
-                else if((j/3)%3 == 1){Cp = letztesFeld.gC(2);Cd = 0;}
-                else{Cp = 4;Cd = -1;}
-
-                if(j%3 == 0){Dp = 0;Dd = 1;}
-                else if(j%3 == 1){Dp = letztesFeld.gC(3);Dd = 0;}
-                else{Dp = 4;Dd = -1;}
-                
                 for(int i=0; i<Felder.size() -1;i++){
                     if(Felder.get(Felder.size() -1).spieler() == sp){
-                        if((letztesFeld.gC(0) + Ad == Felder.get(i).gC(0) && letztesFeld.gC(1) + Bd == Felder.get(i).gC(1)) && 
-                        letztesFeld.gC(2) + Cd == Felder.get(i).gC(2) && letztesFeld.gC(3) + Dd == Felder.get(i).gC(3) ||
-                        (letztesFeld.gC(0) - Ad == Felder.get(i).gC(0) && letztesFeld.gC(1) - Bd == Felder.get(i).gC(1)) && 
-                        letztesFeld.gC(2) - Cd == Felder.get(i).gC(2) && letztesFeld.gC(3) - Dd == Felder.get(i).gC(3)){
-
-                            if((j/27)%3 == 0){Ap = 0;}
-                            else{Ap = letztesFeld.gC(0);}
-
-                            if((j/9)%3 == 0){Bp = 0;}
-                            else if((j/9) % 3 == 1){Bp = letztesFeld.gC(1);}
-                            else{Bp = 4;}
-
-                            if((j/3)%3 == 0){Cp = 0;}
-                            else if((j/3)%3 == 1){Cp = letztesFeld.gC(2);}
-                            else{Cp = 4;}
-
-                            if(j%3 == 0){Dp = 0;}
-                            else if(j%3 == 1){Dp = letztesFeld.gC(3);}
-                            else{Dp = 4;}
+                        int zähler = 0;
+                        for(int h=0;h<Dim;h++){
+                            if(letztesFeld.gC(h) + D[h] == Felder.get(i).gC(h)){
+                                zähler++;
+                            }
+                        }
+                        int zähler2 = 0;
+                        for(int h=0;h<Dim;h++){
+                            if(letztesFeld.gC(h) - D[h] == Felder.get(i).gC(h)){
+                                zähler2++;
+                            }
+                        }
+                        if(zähler == Dim || zähler2 == Dim){
+                            for (int m=0;m<Dim;m++){
+                                if( (j/(int)(Math.pow(3,m))) % 3 == 0){P[m] = 0;}
+                                else if((j/(int)(Math.pow(3,m)))%3==1){P[m] = letztesFeld.gC(m);}
+                                else{P[m] = Dim;}
+                            }
                             int zaehler = 0;
-                            for(int k=0;k<5;k++){
-                                if(toe.Spielfeld(Ap,Bp,Cp,Dp) == sp){
+                            for(int k=0;k<Dim+1;k++){
+                                ArrayList<Integer> PArray = new ArrayList<Integer>();
+                                for(int m=0;m<Dim;m++){
+                                    PArray.add(P[m]);
+                                }
+                                Feld PFeld = new Feld(PArray);
+                                if(toe.Spielfeld(PFeld) == sp){
                                     zaehler ++;
                                 }
-                                Ap += Ad;
-                                Bp += Bd;
-                                Cp += Cd;
-                                Dp += Dd;
+                                for(int m=0;m<=Dim-1;m++){
+                                    P[m] += D[m];
+                                }
                             }
-                            if(zaehler == 5)
+                            if(zaehler == Dim+1)
                             {
                                 gewonnen = sp;
                             }
