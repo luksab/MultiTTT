@@ -7,6 +7,7 @@ import com.firebase.client.*;
 public class MyFrame extends JFrame implements ActionListener
 {
     final int dxy = 10;
+    String[] Login = LoginBox();
 
     final String progName = "TicTacToe";
     final Color farbeHintergrund = new Color(200,200,200);
