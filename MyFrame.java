@@ -223,7 +223,7 @@ public class MyFrame extends JFrame implements ActionListener
 
     public String[] LoginBox(){
         JTextField EMail = new JTextField();
-        JTextField Passwd = new JTextField();
+        JPasswordField Passwd = new JPasswordField();
         Object[] message = {"E-Mail", EMail, 
                 "Passwort", Passwd};
 
@@ -233,7 +233,7 @@ public class MyFrame extends JFrame implements ActionListener
         pane.createDialog(null, "FireBase Login").setVisible(true);
         String[] Login = new String[2];
         Login[0] = EMail.getText();
-        Login[1] = Passwd.getText();
+        Login[1] = new String(Passwd.getPassword());
         return Login;
     }
 
