@@ -12,11 +12,11 @@ java.io.Serializable
     public int checkWin(ArrayList<Feld> Felder, TicTacToe toe){
         int gewonnen = -1;
         int Dim = Felder.get(0).getK().size();
+        Feld letztesFeld = Felder.get(Felder.size()-1);
+        int[] P = new int[Felder.get(0).getK().size()];
+        int[] D = new int[Felder.get(0).getK().size()];
         for(int sp = 0; sp < 2; sp++){
             for(int j=0; j<(int)(Math.pow(3,Dim-1)/2)+Math.pow(3,Dim-1) ; j++){
-                Feld letztesFeld = Felder.get(Felder.size()-1);
-                int[] P = new int[Felder.get(0).getK().size()];
-                int[] D = new int[Felder.get(0).getK().size()];
 
                 for (int i=0;i<Dim;i++){
                     if( (j/(int)(Math.pow(3,i))) % 3 == 0){P[i] = 0;D[i] = 1;}
@@ -25,7 +25,7 @@ java.io.Serializable
                 }
 
                 for(int i=0; i<Felder.size() -1;i++){
-                    if(Felder.get(Felder.size() -1).spieler() == sp){
+                    if(letztesFeld.spieler() == sp){
                         int zähler = 0;
                         for(int h=0;h<Dim;h++){
                             if(letztesFeld.gC(h) + D[h] == Felder.get(i).gC(h)){
