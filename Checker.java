@@ -26,11 +26,13 @@ java.io.Serializable
 
                 for(int i=0; i<Felder.size() -1;i++){
                     if(Felder.get(Felder.size() -1).spieler() == sp){
-                        if((letztesFeld.gC(0) + D[0] == Felder.get(i).gC(0) && letztesFeld.gC(1) + D[1] == Felder.get(i).gC(1)) && 
-                        letztesFeld.gC(2) + D[2] == Felder.get(i).gC(2) && letztesFeld.gC(3) + D[3] == Felder.get(i).gC(3) ||
-                        (letztesFeld.gC(0) - D[0] == Felder.get(i).gC(0) && letztesFeld.gC(1) - D[1] == Felder.get(i).gC(1)) && 
-                        letztesFeld.gC(2) - D[2] == Felder.get(i).gC(2) && letztesFeld.gC(3) - D[3] == Felder.get(i).gC(3)){
-
+                        int zähler = 0;
+                        for(int h=0;h<Dim;h++){
+                            if(letztesFeld.gC(h) + D[h] == Felder.get(i).gC(h)){
+                                zähler++;
+                            }
+                        }
+                        if(zähler == Dim){
                             for (int m=0;m<Dim;m++){
                                 if( (j/(int)(Math.pow(3,m))) % 3 == 0){P[m] = 0;}
                                 else if((j/(int)(Math.pow(3,m)))%3==1){P[m] = letztesFeld.gC(m);}
