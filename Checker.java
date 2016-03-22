@@ -38,7 +38,12 @@ java.io.Serializable
                             }
                             int zaehler = 0;
                             for(int k=0;k<5;k++){
-                                if(toe.Spielfeld(P[0],P[1],P[2],P[3]) == sp){
+                                ArrayList<Integer> PArray = new ArrayList<Integer>();
+                                for(int m=0;m<Dim;m++){
+                                    PArray.add(P[m]);
+                                }
+                                Feld PFeld = new Feld(PArray);
+                                if(toe.Spielfeld(PFeld) == sp){
                                     zaehler ++;
                                 }
                                 for(int m=0;m<=Dim-1;m++){
