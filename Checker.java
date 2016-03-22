@@ -21,7 +21,7 @@ java.io.Serializable
                 for (int i=0;i<Dim;i++){
                     if( (j/(int)(Math.pow(3,i))) % 3 == 0){P[i] = 0;D[i] = 1;}
                     else if((j/(int)(Math.pow(3,i)))%3==1){P[i] = letztesFeld.gC(i);D[i] = 0;}
-                    else{P[i] = 4;D[i] = -1;}
+                    else{P[i] = Dim;D[i] = -1;}
                 }
 
                 for(int i=0; i<Felder.size() -1;i++){
@@ -42,10 +42,10 @@ java.io.Serializable
                             for (int m=0;m<Dim;m++){
                                 if( (j/(int)(Math.pow(3,m))) % 3 == 0){P[m] = 0;}
                                 else if((j/(int)(Math.pow(3,m)))%3==1){P[m] = letztesFeld.gC(m);}
-                                else{P[m] = 4;}
+                                else{P[m] = Dim;}
                             }
                             int zaehler = 0;
-                            for(int k=0;k<5;k++){
+                            for(int k=0;k<Dim+1;k++){
                                 ArrayList<Integer> PArray = new ArrayList<Integer>();
                                 for(int m=0;m<Dim;m++){
                                     PArray.add(P[m]);
@@ -58,7 +58,7 @@ java.io.Serializable
                                     P[m] += D[m];
                                 }
                             }
-                            if(zaehler == 5)
+                            if(zaehler == Dim+1)
                             {
                                 gewonnen = sp;
                             }
