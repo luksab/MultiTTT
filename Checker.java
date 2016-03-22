@@ -9,19 +9,21 @@ java.io.Serializable
 
     }
 
-    public boolean checkWin(ArrayList<Feld> Felder){
-        boolean gewonnen = false;
+    public int checkWin(ArrayList<Feld> Felder){
+        int gewonnen = -1;
         int Dim = Felder.get(0).getK().size();
         Feld letztesFeld = Felder.get(Felder.size()-1);
         int[] P = new int[Felder.get(0).getK().size()];
         int[] D = new int[Felder.get(0).getK().size()];
         int sp = letztesFeld.spieler();
         for(int j=0; j<(int)(Math.pow(3,Dim-1)/2)+Math.pow(3,Dim-1) ; j++){
+
             for (int i=0;i<Dim;i++){
                 if( (j/(int)(Math.pow(3,i))) % 3 == 0){P[i] = 0;D[i] = 1;}
                 else if((j/(int)(Math.pow(3,i)))%3==1){P[i] = letztesFeld.gC(i);D[i] = 0;}
                 else{P[i] = Dim;D[i] = -1;}
             }
+
             for(int i=0; i<Felder.size() -1;i++){
                 int zähler = 0;
                 for(int h=0;h<Dim;h++){
@@ -57,7 +59,7 @@ java.io.Serializable
                     }
                     if(zaehler == Dim+1)
                     {
-                        gewonnen = true;
+                        gewonnen = sp;
                     }
                 }
             }
