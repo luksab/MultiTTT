@@ -9,7 +9,7 @@ java.io.Serializable
 
     }
 
-    public int checkWin(ArrayList<Feld> Felder, TicTacToe toe){
+    public int checkWin(ArrayList<Feld> Felder){
         int gewonnen = -1;
         int Dim = Felder.get(0).getK().size();
         Feld letztesFeld = Felder.get(Felder.size()-1);
@@ -51,7 +51,7 @@ java.io.Serializable
                                     PArray.add(P[m]);
                                 }
                                 Feld PFeld = new Feld(PArray);
-                                if(toe.Spielfeld(PFeld) == sp){
+                                if(Spielfeld(PFeld,Felder) == sp){
                                     zaehler ++;
                                 }
                                 for(int m=0;m<=Dim-1;m++){
@@ -68,5 +68,19 @@ java.io.Serializable
             }
         }
         return gewonnen;
+    }
+    
+    public int Spielfeld(Feld feld,ArrayList<Feld> Felder){
+        for(int i=0;i<Felder.size();i++){
+            int zähler = 0;
+            for(int j=0;j<Felder.get(i).getK().size();j++){
+                if(Felder.get(i).gC(j) == feld.gC(j))
+                    zähler++;
+            }
+            if(zähler == Felder.get(i).getK().size()){
+                return Felder.get(i).spieler();
+            }
+        }
+        return -1;
     }
 }

@@ -70,7 +70,7 @@ public class TicTacToe
 
     public boolean checkWin(){
         Checker checker = new Checker();
-        if(checker.checkWin(Felder,frame.toe) != -1){
+        if(checker.checkWin(Felder) != -1){
             return true;
         }
         else {return false;}

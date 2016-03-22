@@ -1,6 +1,8 @@
 #BlueJ class context
 comment0.params=
 comment0.target=Checker()
-comment1.params=Felder\ toe
-comment1.target=int\ checkWin(java.util.ArrayList,\ TicTacToe)
-numComments=2
+comment1.params=Felder
+comment1.target=int\ checkWin(java.util.ArrayList)
+comment2.params=feld\ Felder
+comment2.target=int\ Spielfeld(Feld,\ java.util.ArrayList)
+numComments=3
