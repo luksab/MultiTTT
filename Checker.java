@@ -13,7 +13,7 @@ java.io.Serializable
         int gewonnen = -1;
         int Dim = Felder.get(0).getK().size();
         for(int sp = 0; sp < 2; sp++){
-            for(int j=0; j<(int)(Math.pow(3,Dim-1)/2)+Math.pow(3,Dim-1) ; j++){
+            for(int j=0; j<Math.pow(3,Dim-1)+Math.pow(3,Dim-1) ; j++){
                 Feld letztesFeld = Felder.get(Felder.size()-1);
                 int[] P = new int[Felder.get(0).getK().size()];
                 int[] D = new int[Felder.get(0).getK().size()];
