@@ -9,11 +9,6 @@ public class Feld
         Koord = NKoord;
         spieler=spielerNeu;
     }
-    
-    public Feld(ArrayList<Integer> NKoord)
-    {
-        Koord = NKoord;
-    }
 
     public Feld()
     {
