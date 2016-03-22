@@ -18,7 +18,7 @@ public class TicTacToe
     
     public int Spielfeld(Feld feld){
         for(int i=0;i<Felder.size();i++){
-            if(Felder.get(i).getK() == feld.getK()){
+            if(Felder.get(i).gC(0) == feld.gC(0) && Felder.get(i).gC(1) == feld.gC(1) && Felder.get(i).gC(2) == feld.gC(2) && Felder.get(i).gC(3) == feld.gC(3)){
                 return Felder.get(i).spieler();
             }
         }
