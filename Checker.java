@@ -9,8 +9,8 @@ java.io.Serializable
 
     }
 
-    public int checkWin(ArrayList<Feld> Felder){
-        int gewonnen = -1;
+    public boolean checkWin(ArrayList<Feld> Felder){
+        boolean gewonnen = false;
         int Dim = Felder.get(0).getK().size();
         Feld letztesFeld = Felder.get(Felder.size()-1);
         int[] P = new int[Felder.get(0).getK().size()];
@@ -59,7 +59,7 @@ java.io.Serializable
                     }
                     if(zaehler == Dim+1)
                     {
-                        gewonnen = sp;
+                        gewonnen = true;
                     }
                 }
             }
