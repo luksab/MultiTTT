@@ -21,8 +21,7 @@ public class MyFrameSP extends JFrame implements ActionListener
     JMenuItem beenden;
     JMenuItem showAll;
     JMenuItem resetOutput;
-    JMenuItem ChPW;
-    JMenuItem DelFire;
+    JMenuItem reset;
 
     private int spieler = 0;
     private int ich = 0;
@@ -165,6 +164,8 @@ public class MyFrameSP extends JFrame implements ActionListener
         TTT = new JMenu("TTT");
         beenden = new JMenuItem("beenden");
         beenden.addActionListener(this);
+        reset = new JMenuItem("reset");
+        reset.addActionListener(this);
         showAll = new JMenuItem("Zeige Alle Züge");
         showAll.addActionListener(this);
         resetOutput = new JMenuItem("reset Ausgabe");
@@ -172,6 +173,7 @@ public class MyFrameSP extends JFrame implements ActionListener
         menueLeiste.add(datei);
         menueLeiste.add(TTT);
         datei.add(beenden);
+        datei.add(reset);
         TTT.add(showAll);
         TTT.add(resetOutput);
         this.setJMenuBar(menueLeiste);
@@ -194,12 +196,14 @@ public class MyFrameSP extends JFrame implements ActionListener
         if (event.getSource() == resetOutput){
             output.clear();
         }
-        for(int i=0;i<625;i++){
+        if (event.getSource() == reset){
+            reset();
+        }
+        for(int i=0;i<Math.pow(Dim+1,Dim);i++){
             MyButton Button = Buttons.get(i);
             if (event.getSource()==Button){
                 ArrayList<Integer> Koord = Button.gK();
                 Feld feld = new Feld (Koord,ich);
-                System.out.println("F:"+feld);
                 if (toe.check(feld) && darfIch && !SpielZuende){
                     updateButton(feld);
                     toe.Felder.add(feld);
@@ -217,7 +221,6 @@ public class MyFrameSP extends JFrame implements ActionListener
                     }
                     if(!SpielZuende){
                         darfIch = false;
-                        System.out.println(""+KI.setze(toe));
                         feld = KI.setze(toe);
                         feld.setSpieler(1);
                         updateButton(feld);
@@ -247,16 +250,29 @@ public class MyFrameSP extends JFrame implements ActionListener
     }
 
     public void reset(){
-        this.setSize(xMax,yMax);
-        for(int i=0;i<625;i++) {
-            Buttons.get(i).update(new Color(173,216,230));
+        anzahlZüge = 0;
+        darfIch = true;
+        SpielZuende = false;
+        if(Dim == 2){
+            for(int i=0;i<9;i++) {
+                Buttons.get(i).update(new Color(173,216,230));
+            }
+        }
+        else if(Dim == 3){
+            for(int i=0;i<64;i++) {
+                Buttons.get(i).update(new Color(173,216,230));
+            }
+        }
+        else if(Dim == 4){
+            for(int i=0;i<625;i++) {
+                Buttons.get(i).update(new Color(173,216,230));
+            }
         }
         output.clear();
         toe.reset();
     }
 
     public void updateButton(Feld feld){
-        System.out.println("F:"+feld);
         int i = 0;
         int v = Dim;
         for(int y=0;y<Dim;y++){

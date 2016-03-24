@@ -1,9 +1,3 @@
-/*
- * HBG - Kreitz
- * Datum: 1. Juni 2003
- * 
- */
-
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -34,7 +28,7 @@ public class MyTextField extends JTextField
    {
       this.setForeground(Color.black);
       this.setBackground(Color.white);
-      this.setLocation(x0, y0 + (zeile-1) *(hoehe+dy));
+      this.setLocation(x0, y0 + zeile *(hoehe+dy));
       this.setSize(breite, hoehe);      
       myFont = new Font("Monospaced",0,12);  
       this.setFont(myFont);
