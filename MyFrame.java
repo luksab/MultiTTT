@@ -63,7 +63,7 @@ public class MyFrame extends JFrame implements ActionListener
         yMax = height - (50+dxy);
         xMitte = xMax - (breiteRechts+dxy+dxy);
         hoeheRechts = yMax;
-        
+
         farbeSpieler.add(new Color(200,0,200));
         farbeSpieler.add(new Color(200,200,0));
         farbeSpieler.add(new Color(173,216,230));
@@ -253,9 +253,15 @@ public class MyFrame extends JFrame implements ActionListener
                 JOptionPane.OK_CANCEL_OPTION);
         pane.createDialog(null, "FireBase Login").setVisible(true);
         String[] Login = new String[2];
-        Login[0] = EMail.getText();
-        Login[1] = new String(Passwd.getPassword());
-        return Login;
+        if(!EMail.equals("") && !(Passwd.getPassword().length == 0)){
+            Login[0] = EMail.getText();
+            Login[1] = new String(Passwd.getPassword());
+            return Login;
+        }
+        else{
+            return LoginBox();
+        }
+
     }
 
     public String[] PasswdChangeBox(){
