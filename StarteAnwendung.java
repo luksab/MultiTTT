@@ -18,13 +18,16 @@ public class StarteAnwendung
     public StarteAnwendung() 
     {
         boolean SpMp = SpMp();
-        if(SpMp){
-            f = new MyFrame(); 
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if(!SpMp){
+            int Dim = Dim();
+            if(Dim == 2){
+                s = new MyFrameSP(); 
+                s.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            }
         }
         else{
-            s = new MyFrameSP(); 
-            s.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            f = new MyFrame(); 
+            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
     }
 
@@ -38,5 +41,24 @@ public class StarteAnwendung
             return true;
         }
         return false;
+    }
+
+    public int Dim(){
+        Object[] possibleValues = { "Zwei", "Drei", "Vier", "Mehr" };
+        Object selectedValue = JOptionPane.showInputDialog(null,
+                "Dimensionen:", "Wie viele?",
+                JOptionPane.INFORMATION_MESSAGE, null,
+                possibleValues, possibleValues[0]);
+        boolean ja = false;
+        for(int i=0;i<possibleValues.length;i++){
+            if(possibleValues[i] == selectedValue){
+                ja = true;
+                return i;
+            }
+        }
+        if(!ja){
+            return Dim();
+        }
+        return -1;
     }
 }
