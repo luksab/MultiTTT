@@ -1,12 +1,10 @@
 #BlueJ class context
 comment0.params=Dim
-comment0.target=MyFrameSP(int)
+comment0.target=MyFrameMulti(int)
 comment1.params=args
 comment1.target=void\ main(java.lang.String[])
 comment2.params=event
 comment2.target=void\ actionPerformed(java.awt.event.ActionEvent)
 comment3.params=
 comment3.target=void\ reset()
-comment4.params=feld
-comment4.target=void\ updateButton(Feld)
-numComments=5
+numComments=4

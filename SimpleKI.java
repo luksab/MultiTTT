@@ -10,7 +10,7 @@ public class SimpleKI
     public Feld setze(TicTacToe toe)
     {
         int Dim = toe.Felder.get(0).getK().size();
-        if(toe.Felder.size() > 3){
+        if(toe.Felder.size() > 1){
             Feld FastIch = fast(toe.Felder,2);
             if(FastIch.spieler() == 0){
                 return FastIch;

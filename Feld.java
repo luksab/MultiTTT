@@ -45,7 +45,10 @@ public class Feld
     }
 
     public String toString(){
-        String s = ""+"Spieler: "+spieler+" Koordinaten: "+Koord.get(0)+"|"+Koord.get(1)+"|"+Koord.get(2)+"|"+Koord.get(3);
+        String s = ""+"Spieler: "+spieler+" Koordinaten: ";
+        for(int i=0;i<Koord.size();i++){
+            s += +Koord.get(i)+"|";
+        }
         return s;
     }
 }

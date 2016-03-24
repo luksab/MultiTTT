@@ -2,7 +2,13 @@ import java.util.*;
 public class TicTacToe
 {
     public ArrayList<Feld> Felder = new ArrayList<Feld>();
+    private int Dim;
     public TicTacToe(){
+        Dim = 4;
+    }
+    
+    public TicTacToe(int Dim){
+        this.Dim = Dim;
     }
 
     public int Spielfeld(int A,int B,int C,int D){
@@ -42,12 +48,26 @@ public class TicTacToe
     }
 
     public boolean check(Feld feld){
-        if(Spielfeld(feld) == -1){
-            return true;
+        if(feld.getK().size() == Dim){
+            try{
+                for(int i=0;i<Dim;i++){
+                    if(!(feld.gC(i)>=0&&feld.gC(i)<=Dim)){
+                        return false;
+                    }
+                }
+                if(Spielfeld(feld) == -1){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            catch(ArrayIndexOutOfBoundsException e){
+                return false;
+            }
         }
-        else{
+        else
             return false;
-        }
     }
 
     public void addFeld(Feld feld){
@@ -56,12 +76,17 @@ public class TicTacToe
 
     public String click(){
         Feld feld = Felder.get(Felder.size() -1);
+        int Dim=feld.getK().size();
         String s = "Das solltest du nicht sehen.";
         if(checkWin()){
             s = "Spieler "+feld.spieler()+" hat gewonnen!";
         }
         else{
-            s = "Spieler "+feld.spieler()+" hat auf das Feld "+feld.gC(0)+"|"+feld.gC(1)+"|"+feld.gC(2)+"|"+feld.gC(3)+" gesetzt";
+            s = "Spieler "+feld.spieler()+" hat auf das Feld ";
+            for(int i=0;i<Dim;i++){
+                s += feld.gC(i)+"|";
+            }
+            s += " gesetzt";
         }
         return s;
     }

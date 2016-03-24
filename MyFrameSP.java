@@ -12,7 +12,6 @@ public class MyFrameSP extends JFrame implements ActionListener
     ArrayList<Color> farbeSpieler = new ArrayList<Color>();
 
     MyScrollingTextArea output;
-    MyButton button_1, button_2, button_3, button_4, button_5, button_6, button_7, button_8, button_9;
     ArrayList<MyButton> Buttons = new ArrayList<MyButton>();
     TicTacToe toe;
 
@@ -47,9 +46,11 @@ public class MyFrameSP extends JFrame implements ActionListener
     private int breiteRechts;
     private int hoeheRechts;
     private SimpleKI KI = new SimpleKI();
+    private int Dim;
 
-    public MyFrameSP()
+    public MyFrameSP(int Dim)
     {   
+        this.Dim = Dim;
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         width = gd.getDisplayMode().getWidth();
         height = gd.getDisplayMode().getHeight()-50;
@@ -80,12 +81,79 @@ public class MyFrameSP extends JFrame implements ActionListener
         workspace.setBounds(0,0, 935, 935);
         workspace.setPreferredSize(new Dimension(935,935));
 
-        toe = new TicTacToe();
+        toe = new TicTacToe(Dim);
 
-        for(int i=0;i<625;i++) {
-            Buttons.add(new MyButton(dxy + (35*(i/25)+(10*(int)((i/25)/5))),dxy + (35*(i%25)+(10*(int)((i%25)/5))),30,30));
-            Buttons.get(i).addActionListener(this);
-            workspace.add(Buttons.get(i));
+        if(Dim == 4){
+            int xB=0;
+            int yB=0;
+            xB=935;
+            yB=935;
+            workspace.setBounds(0,0, xB, yB);
+            workspace.setPreferredSize(new Dimension(xB,yB));
+            int i = 0;
+            for(int a=0;a<Dim+1;a++){
+                for(int b=0;b<Dim+1;b++){
+                    for(int c=0;c<Dim+1;c++){
+                        for(int d=0;d<Dim+1;d++){
+                            ArrayList<Integer> Koord = new ArrayList<Integer>();
+                            Koord.add(a);
+                            Koord.add(b);
+                            Koord.add(c);
+                            Koord.add(d);
+                            Buttons.add(new MyButton(dxy + ((35*a)+((35*5+dxy)*b)),dxy + ((35*c)+((35*5+dxy)*d)),30,30,Koord));
+                            Buttons.get(i).addActionListener(this);
+                            workspace.add(Buttons.get(i));
+                            i++;
+                        }
+                    }
+                }
+            }
+        }
+
+        else if(Dim == 3){
+            int xB=0;
+            int yB=0;
+            xB=935;
+            yB=300;
+            workspace.setBounds(0,0, xB, yB);
+            workspace.setPreferredSize(new Dimension(xB,yB));
+            int i = 0;
+            int b = 0;
+            for(int a=0;a<Dim+1;a++){
+                for(int c=0;c<Dim+1;c++){
+                    for(int d=0;d<Dim+1;d++){
+                        ArrayList<Integer> Koord = new ArrayList<Integer>();
+                        Koord.add(a);
+                        Koord.add(c);
+                        Koord.add(d);
+                        Buttons.add(new MyButton(dxy + ((35*a)+((35*(Dim+1)+dxy)*b)),dxy + ((35*c)+((35*(Dim+1)+dxy)*d)),30,30,Koord));
+                        Buttons.get(i).addActionListener(this);
+                        workspace.add(Buttons.get(i));
+                        i++;
+                    }
+                }
+            }
+        }
+
+        else if(Dim == 2){
+            int xB=0;
+            int yB=0;
+            xB=350;
+            yB=350;
+            workspace.setBounds(0,0, xB, yB);
+            workspace.setPreferredSize(new Dimension(xB,yB));
+            int i = 0;
+            for(int a=0;a<Dim+1;a++){
+                for(int b=0;b<Dim+1;b++){
+                    ArrayList<Integer> Koord = new ArrayList<Integer>();
+                    Koord.add(a);
+                    Koord.add(b);
+                    Buttons.add(new MyButton(dxy + (105*a),dxy + (105*b),100,100,Koord));
+                    Buttons.get(i).addActionListener(this);
+                    workspace.add(Buttons.get(i));
+                    i++;
+                }
+            }
         }
 
         scroll = new JScrollPane(workspace);
@@ -112,7 +180,7 @@ public class MyFrameSP extends JFrame implements ActionListener
     } 
 
     public static void main(String[] args){        
-        new MyFrameSP();
+        new MyFrameSP(4);
     }
 
     public void actionPerformed(ActionEvent event)
@@ -127,14 +195,12 @@ public class MyFrameSP extends JFrame implements ActionListener
             output.clear();
         }
         for(int i=0;i<625;i++){
-            if (event.getSource()==Buttons.get(i)){
-                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && darfIch && !SpielZuende){
-                    ArrayList<Integer> Koord = new ArrayList<Integer>();
-                    Koord.add((i%25)/5);
-                    Koord.add(i%5);
-                    Koord.add((i/25)/5);
-                    Koord.add((i/25)%5);
-                    Feld feld = new Feld (Koord,ich);
+            MyButton Button = Buttons.get(i);
+            if (event.getSource()==Button){
+                ArrayList<Integer> Koord = Button.gK();
+                Feld feld = new Feld (Koord,ich);
+                System.out.println("F:"+feld);
+                if (toe.check(feld) && darfIch && !SpielZuende){
                     updateButton(feld);
                     toe.Felder.add(feld);
                     anzahlZüge++;
@@ -144,9 +210,14 @@ public class MyFrameSP extends JFrame implements ActionListener
                             SpielZuende = true;
                             darfIch = false;
                         }
+                        else if(toe.Felder.size() >= Math.pow(Dim+1,Dim)){
+                            SpielZuende = true;
+                            output.writeLine("UnEntSchieden");
+                        }
                     }
                     if(!SpielZuende){
                         darfIch = false;
+                        System.out.println(""+KI.setze(toe));
                         feld = KI.setze(toe);
                         feld.setSpieler(1);
                         updateButton(feld);
@@ -163,7 +234,11 @@ public class MyFrameSP extends JFrame implements ActionListener
                     }
                 }
                 else {
-                    String s = "Du kannst nicht in das Feld "+(i%25)/5+"|"+(i%5)+"|"+(i/25)/5+"|"+((i/25)%5)+" setzen";
+                    String s = "Du kannst nicht in das Feld ";
+                    for(int y=0;y<Dim;y++){
+                        s += feld.gC(y)+"|";
+                    }
+                    s += " setzen!";
                     output.writeLine(s);
                 }
                 break;
@@ -181,8 +256,13 @@ public class MyFrameSP extends JFrame implements ActionListener
     }
 
     public void updateButton(Feld feld){
-        Buttons.get((125*feld.gC(2))+(25*feld.gC(3))+(5*feld.gC(0))+feld.gC(1)).update(
-            farbeSpieler.get(
-                feld.spieler()));
+        System.out.println("F:"+feld);
+        int i = 0;
+        int v = Dim;
+        for(int y=0;y<Dim;y++){
+            v--;
+            i += Math.pow(Dim+1,v)*feld.gC(y);
+        }
+        Buttons.get(i).update(farbeSpieler.get(feld.spieler()));
     }
 } 

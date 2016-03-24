@@ -3,27 +3,24 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class MyFrameMultiDim extends JFrame implements ActionListener
+public class MyFrameMulti extends JFrame implements ActionListener
 {
     final int dxy = 10;
 
     final String progName = "TicTacToe";
     final Color farbeHintergrund = new Color(200,200,200);
-    ArrayList<Color> farbeSpieler = new ArrayList<Color>();
 
+    MyButton button;
     MyScrollingTextArea output;
-    MyButton button_1, button_2, button_3, button_4, button_5, button_6, button_7, button_8, button_9;
-    ArrayList<MyButton> Buttons = new ArrayList<MyButton>();
     TicTacToe toe;
+    ArrayList<MyTextField> inputs = new ArrayList<MyTextField>();
 
     JMenuBar menueLeiste;
     JMenu datei;
     JMenu TTT;
     JMenuItem beenden;
     JMenuItem showAll;
-    JMenuItem resetOutput;
-    JMenuItem ChPW;
-    JMenuItem DelFire;
+    JMenuItem reset;
 
     private int spieler = 0;
     private int ich = 0;
@@ -32,13 +29,11 @@ public class MyFrameMultiDim extends JFrame implements ActionListener
     private boolean darfIch = true;
     private boolean SpielZuende = false;
     private boolean angemeldet = false;
-    private String Email;
-    private String SpielerIch;
-    private String SpielerDu;
     private JScrollPane scroll;
     private JPanel workspace;
     private int width;
     private int height;
+    private int Dim;
 
     private int xMax;
     private int yMax;
@@ -46,10 +41,12 @@ public class MyFrameMultiDim extends JFrame implements ActionListener
     private int breiteLinks = 200 - 2*dxy;
     private int breiteRechts;
     private int hoeheRechts;
-    private SimpleKI KI = new SimpleKI();
+    private SimpleKI KI;
 
-    public MyFrameMultiDim()
+    public MyFrameMulti(int Dim)
     {   
+        this.Dim = Dim;
+        KI = new SimpleKI();
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         width = gd.getDisplayMode().getWidth();
         height = gd.getDisplayMode().getHeight()-50;
@@ -58,10 +55,6 @@ public class MyFrameMultiDim extends JFrame implements ActionListener
         yMax = height - (50+dxy);
         xMitte = xMax - (breiteRechts+dxy+dxy);
         hoeheRechts = yMax;
-
-        farbeSpieler.add(new Color(200,0,200));
-        farbeSpieler.add(new Color(200,200,0));
-        farbeSpieler.add(new Color(173,216,230));
 
         this.setTitle(progName);
         this.setSize(width,height);
@@ -77,16 +70,19 @@ public class MyFrameMultiDim extends JFrame implements ActionListener
         cp.add(output);
 
         JPanel workspace = new JPanel(null);
-        workspace.setBounds(0,0, 935, 935);
-        workspace.setPreferredSize(new Dimension(935,935));
+        workspace.setBounds(0,0, 935, (Dim*35)+(2*dxy));
+        workspace.setPreferredSize(new Dimension(935,(Dim*35)+(2*dxy)));
 
-        toe = new TicTacToe();
+        toe = new TicTacToe(Dim);
 
-        for(int i=0;i<625;i++) {
-            Buttons.add(new MyButton(dxy + (35*(i/25)+(10*(int)((i/25)/5))),dxy + (35*(i%25)+(10*(int)((i%25)/5))),30,30));
-            Buttons.get(i).addActionListener(this);
-            workspace.add(Buttons.get(i));
+        for(int i=0;i<Dim;i++){
+            inputs.add(new MyTextField(i,xMitte-100));
+            inputs.get(i).addActionListener(this);
+            workspace.add(inputs.get(i));
         }
+        button = new MyButton(dxy,xMitte-75,50,Dim*35);
+        button.addActionListener(this);
+        workspace.add(button);
 
         scroll = new JScrollPane(workspace);
         scroll.setSize(xMitte,yMax);
@@ -97,22 +93,22 @@ public class MyFrameMultiDim extends JFrame implements ActionListener
         TTT = new JMenu("TTT");
         beenden = new JMenuItem("beenden");
         beenden.addActionListener(this);
+        reset = new JMenuItem("reset");
+        reset.addActionListener(this);
         showAll = new JMenuItem("Zeige Alle Züge");
         showAll.addActionListener(this);
-        resetOutput = new JMenuItem("reset Ausgabe");
-        resetOutput.addActionListener(this);
         menueLeiste.add(datei);
         menueLeiste.add(TTT);
         datei.add(beenden);
+        datei.add(reset);
         TTT.add(showAll);
-        TTT.add(resetOutput);
         this.setJMenuBar(menueLeiste);
 
         this.setVisible(true);
     } 
 
     public static void main(String[] args){        
-        new MyFrameSP(4);
+        new MyFrameMulti(4);
     }
 
     public void actionPerformed(ActionEvent event)
@@ -123,19 +119,33 @@ public class MyFrameMultiDim extends JFrame implements ActionListener
         if (event.getSource() == showAll){
             toe.toJText(output);
         }
-        if (event.getSource() == resetOutput){
-            output.clear();
+        if (event.getSource() == reset){
+            reset();
         }
-        for(int i=0;i<625;i++){
-            if (event.getSource()==Buttons.get(i)){
-                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && darfIch && !SpielZuende){
-                    ArrayList<Integer> Koord = new ArrayList<Integer>();
-                    Koord.add((i%25)/5);
-                    Koord.add(i%5);
-                    Koord.add((i/25)/5);
-                    Koord.add((i/25)%5);
-                    Feld feld = new Feld (Koord,ich);
-                    updateButton(feld);
+        if (event.getSource()==button){
+            ArrayList<Integer> Koord = new ArrayList<Integer>();
+            for(int i=0;i<Dim;i++){
+                MyTextField k = inputs.get(i);
+                if(k.isInteger()){
+                    int z = k.readInteger();
+                    Koord.add(z);
+                }
+            }
+            Feld feld = new Feld (Koord,ich);
+            if (toe.check(feld) && darfIch && !SpielZuende){
+                toe.Felder.add(feld);
+                anzahlZüge++;
+                if(toe.Felder.size() > 0){
+                    output.writeLine(toe.click());
+                    if(toe.checkWin()){
+                        SpielZuende = true;
+                        darfIch = false;
+                    }
+                }
+                if(!SpielZuende){
+                    darfIch = false;
+                    feld = KI.setze(toe);
+                    feld.setSpieler(1);
                     toe.Felder.add(feld);
                     anzahlZüge++;
                     if(toe.Felder.size() > 0){
@@ -145,44 +155,26 @@ public class MyFrameMultiDim extends JFrame implements ActionListener
                             darfIch = false;
                         }
                     }
-                    if(!SpielZuende){
-                        darfIch = false;
-                        feld = KI.setze(toe);
-                        feld.setSpieler(1);
-                        updateButton(feld);
-                        toe.Felder.add(feld);
-                        anzahlZüge++;
-                        if(toe.Felder.size() > 0){
-                            output.writeLine(toe.click());
-                            if(toe.checkWin()){
-                                SpielZuende = true;
-                                darfIch = false;
-                            }
-                        }
-                        darfIch = true;
-                    }
+                    darfIch = true;
                 }
-                else {
-                    String s = "Du kannst nicht in das Feld "+(i%25)/5+"|"+(i%5)+"|"+(i/25)/5+"|"+((i/25)%5)+" setzen";
-                    output.writeLine(s);
+            }
+            else {
+                String s = "Du kannst nicht in das Feld ";
+                for(int i=0;i<Dim;i++){
+                    MyTextField k = inputs.get(i);
+                    s += inputs.get(i).readString()+"|";
                 }
-                break;
+                s += " setzen!";
+                output.writeLine(s);
             }
         } 
     }
 
     public void reset(){
-        this.setSize(xMax,yMax);
-        for(int i=0;i<625;i++) {
-            Buttons.get(i).update(new Color(173,216,230));
-        }
+        anzahlZüge = 0;     
+        darfIch = true;
+        SpielZuende = false;
         output.clear();
         toe.reset();
-    }
-
-    public void updateButton(Feld feld){
-        Buttons.get((125*feld.gC(2))+(25*feld.gC(3))+(5*feld.gC(0))+feld.gC(1)).update(
-            farbeSpieler.get(
-                feld.spieler()));
     }
 } 

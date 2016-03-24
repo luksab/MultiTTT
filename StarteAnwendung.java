@@ -1,8 +1,3 @@
-/*
- * Kreitz, September 2015
- * Startklasse fuer gui-Programme
- */
-
 import java.awt.*;
 import javax.swing.*;
 
@@ -10,6 +5,7 @@ public class StarteAnwendung
 {
     static MyFrame f;
     static MyFrameSP s;
+    static MyFrameMulti m;
 
     public static void main(String[] args){        
         new StarteAnwendung();
@@ -20,15 +16,26 @@ public class StarteAnwendung
         boolean SpMp = SpMp();
         if(!SpMp){
             int Dim = Dim();
-            if(Dim == 2){
-                s = new MyFrameSP(); 
+            if(Dim < 3){
+                int Dimensionen = Dim+2;
+                s = new MyFrameSP(Dimensionen); 
                 s.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            }
+            else{
+                int Dimensionen = DimMehr();
+                m = new MyFrameMulti(Dimensionen); 
+                m.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
         }
         else{
             f = new MyFrame(); 
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
+    }
+
+    public int DimMehr(){
+        int ans = Integer.parseInt( JOptionPane.showInputDialog(null,"Dimensionen","Wie Viele denn Genau?",JOptionPane.INFORMATION_MESSAGE));
+        return ans;
     }
 
     public boolean SpMp(){
