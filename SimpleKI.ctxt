@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.params=
+comment0.target=SimpleKI()
+comment1.params=toe
+comment1.target=Feld\ setze(TicTacToe)
+comment2.params=toe
+comment2.target=Feld\ randF(TicTacToe)
+comment3.params=Felder\ IOD
+comment3.target=Feld\ fast(java.util.ArrayList,\ int)
+comment4.params=Felder
+comment4.target=Feld\ FindLargestLine(java.util.ArrayList)
+comment5.params=feld\ Felder
+comment5.target=int\ Spielfeld(Feld,\ java.util.ArrayList)
+numComments=6

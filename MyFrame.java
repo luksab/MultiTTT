@@ -85,7 +85,7 @@ public class MyFrame extends JFrame implements ActionListener
         workspace.setBounds(0,0, 935, 935);
         workspace.setPreferredSize(new Dimension(935,935));
 
-        toe = new TicTacToe(this);
+        toe = new TicTacToe();
 
         for(int i=0;i<625;i++) {
             Buttons.add(new MyButton(dxy + (35*(i/25)+(10*(int)((i/25)/5))),dxy + (35*(i%25)+(10*(int)((i%25)/5))),30,30));

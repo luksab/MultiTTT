@@ -1,6 +1,6 @@
 #BlueJ class context
-comment0.params=Neuframe
-comment0.target=TicTacToe(MyFrame)
+comment0.params=
+comment0.target=TicTacToe()
 comment1.params=A\ B\ C\ D
 comment1.target=int\ Spielfeld(int,\ int,\ int,\ int)
 comment10.params=zug

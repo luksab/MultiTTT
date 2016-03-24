@@ -2,9 +2,7 @@ import java.util.*;
 public class TicTacToe
 {
     public ArrayList<Feld> Felder = new ArrayList<Feld>();
-    MyFrame frame;
-    public TicTacToe(MyFrame Neuframe){
-        frame = Neuframe;
+    public TicTacToe(){
     }
 
     public int Spielfeld(int A,int B,int C,int D){
