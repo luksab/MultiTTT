@@ -1,4 +1,4 @@
-PROJECT TITLE: 4D-TicTacToe
-PURPOSE OF PROJECT:Experimental 4-Dimensional TicTacToe multiplayer Game
+PROJECT TITLE: MultiDimensional TicTacToe
+PURPOSE OF PROJECT:Experimental Multi-Dimensional TicTacToe multiplayer Game
 AUTHORS: Lukas Sabatschus
-USER INSTRUCTIONS: Don't try it at the moment ... it is not ready for 'users'
+USER INSTRUCTIONS: Execute the Jar file with Java
