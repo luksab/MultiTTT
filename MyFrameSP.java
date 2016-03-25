@@ -209,7 +209,7 @@ public class MyFrameSP extends JFrame implements ActionListener
                     toe.Felder.add(feld);
                     anzahlZüge++;
                     if(toe.Felder.size() > 0){
-                        output.writeLine(toe.click());
+                        output.writeLine(toe.click(this));
                         if(toe.checkWin()){
                             SpielZuende = true;
                             darfIch = false;
@@ -227,7 +227,7 @@ public class MyFrameSP extends JFrame implements ActionListener
                         toe.Felder.add(feld);
                         anzahlZüge++;
                         if(toe.Felder.size() > 0){
-                            output.writeLine(toe.click());
+                            output.writeLine(toe.click(this));
                             if(toe.checkWin()){
                                 SpielZuende = true;
                                 darfIch = false;
@@ -280,5 +280,15 @@ public class MyFrameSP extends JFrame implements ActionListener
             i += Math.pow(Dim+1,v)*feld.gC(y);
         }
         Buttons.get(i).update(farbeSpieler.get(feld.spieler()));
+    }
+    
+    public void updateButton(Feld feld,Color farbe){
+        int i = 0;
+        int v = Dim;
+        for(int y=0;y<Dim;y++){
+            v--;
+            i += Math.pow(Dim+1,v)*feld.gC(y);
+        }
+        Buttons.get(i).update(farbe);
     }
 } 

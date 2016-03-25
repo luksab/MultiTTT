@@ -1,4 +1,7 @@
 import java.util.*;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
 public class TicTacToe
 {
     public ArrayList<Feld> Felder = new ArrayList<Feld>();
@@ -6,7 +9,7 @@ public class TicTacToe
     public TicTacToe(){
         Dim = 4;
     }
-    
+
     public TicTacToe(int Dim){
         this.Dim = Dim;
     }
@@ -91,12 +94,38 @@ public class TicTacToe
         return s;
     }
 
+    public String click(MyFrameSP frame){
+        Feld feld = Felder.get(Felder.size() -1);
+        int Dim=feld.getK().size();
+        String s = "Das solltest du nicht sehen.";
+        if(checkWin()){
+            s = "Spieler "+feld.spieler()+" hat gewonnen!";
+            ArrayList<Feld> felders = getWin();
+            for(int i=0;i<felders.size();i++){
+                frame.updateButton(felders.get(i),new Color(100,100,100));
+            }
+        }
+        else{
+            s = "Spieler "+feld.spieler()+" hat auf das Feld ";
+            for(int i=0;i<Dim;i++){
+                s += feld.gC(i)+"|";
+            }
+            s += " gesetzt";
+        }
+        return s;
+    }
+
     public boolean checkWin(){
         Checker checker = new Checker();
         if(checker.checkWin(Felder)){
             return true;
         }
         else {return false;}
+    }
+
+    public ArrayList<Feld> getWin(){
+        Checker checker = new Checker();
+        return checker.GetWin(Felder);
     }
 
     public int anzahlZüge(){

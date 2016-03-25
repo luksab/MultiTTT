@@ -9,4 +9,6 @@ comment3.params=
 comment3.target=void\ reset()
 comment4.params=feld
 comment4.target=void\ updateButton(Feld)
-numComments=5
+comment5.params=feld\ farbe
+comment5.target=void\ updateButton(Feld,\ java.awt.Color)
+numComments=6
