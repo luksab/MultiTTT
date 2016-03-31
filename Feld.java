@@ -3,6 +3,7 @@ public class Feld
 {
     private ArrayList<Integer> Koord = new ArrayList<Integer>();
     private int spieler;
+    private int reihe;
 
     public Feld(ArrayList<Integer> NKoord,int spielerNeu)
     {
@@ -13,6 +14,12 @@ public class Feld
     public Feld(ArrayList<Integer> NKoord)
     {
         Koord = NKoord;
+    }
+    
+    public Feld(int Nreihe,ArrayList<Integer> NKoord)
+    {
+        Koord = NKoord;
+        reihe = Nreihe;
     }
 
     public Feld()
@@ -28,6 +35,10 @@ public class Feld
     public int gC(int a){
         return Koord.get(a);
     }
+    
+    public int gR(){
+        return reihe;
+    }
 
     public int spieler()
     {
@@ -42,6 +53,11 @@ public class Feld
     public void setSpieler(int NSpieler)
     {
         spieler = NSpieler;
+    }
+    
+    public void setReihe(int Nreihe)
+    {
+        reihe = Nreihe;
     }
 
     public String toString(){

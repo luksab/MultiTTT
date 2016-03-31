@@ -36,6 +36,40 @@ public class SimpleKI
         int Dim = toe.Felder.get(0).getK().size();
         ArrayList<Integer> Koord = new ArrayList<Integer>();
         boolean ja = false;
+        if(Dim%2 == 0){
+            //grade Dimensionszahl = es gibt EINE Mitte
+            for(int i=0;i<Dim;i++){
+                Koord.add(Dim/2);
+            }
+            if(toe.check(new Feld(Koord))){
+                return new Feld(Koord);
+            }
+        }
+        else{
+            //UNgrade Dimensionszahl = es gibt 2^Dim "Mitten"
+            for(int k=0;k<Math.pow(2,Dim);k++){
+                Koord.clear();
+                for (int i=0;i<Dim;i++){
+                    if( (k/(int)(Math.pow(2,i))) % 2 == 0){Koord.add((int)(Dim/2));}
+                    else{Koord.add((int)(Dim/2)+1);}
+                }
+                ja = toe.check(new Feld(Koord));
+                if(ja){
+                    return new Feld(Koord);
+                }
+            }
+        }
+
+        for(int j=0; j<(int)(Math.pow(3,Dim-1)/2)+Math.pow(3,Dim-1) ; j++){
+            Koord.clear();
+            for (int i=0;i<Dim;i++){
+                if( (j/(int)(Math.pow(2,i))) % 2 == 0){Koord.add(0);}
+                else{Koord.add(Dim+1);}
+            }
+            if(toe.check(new Feld(Koord))){
+                return new Feld(Koord);
+            }
+        }
         while(!ja){
             Koord.clear();
             for(int i=0;i<Dim;i++){
@@ -44,6 +78,7 @@ public class SimpleKI
             ja = toe.check(new Feld(Koord));
         }
         return new Feld(Koord);
+
     }
 
     private Feld fast(ArrayList<Feld> Felder,int IOD){
@@ -144,13 +179,14 @@ public class SimpleKI
                             zähler2++;
                         }
                     }
-                    boolean jaa=false;
+                    boolean jaa=true;
                     for (int m=0;m<Dim;m++){
                         if( (j/(int)(Math.pow(3,m))) % 3 == 0){P[m] = 0;}
                         else if((j/(int)(Math.pow(3,m)))%3==1){P[m] = letztesFeld.gC(m);}
                         else{P[m] = Dim;}
                     }
                     int zaehler = 0;
+                    Feld CacheFeld = new Feld();
                     for(int k=0;k<Dim+1;k++){
                         ArrayList<Integer> PArray = new ArrayList<Integer>();
                         for(int m=0;m<Dim;m++){
@@ -161,18 +197,24 @@ public class SimpleKI
                             zaehler ++;
                         }
                         else if(Spielfeld(PFeld,Felder) == -1){
-                            jaa=false;
-                            BitteZiehen.setSpieler(0);
-                            BitteZiehen=PFeld;
-                            if(zaehler > longestLine){
-                                longestLine = zaehler;
-                                jaa=true;
-                                //System.out.println("LL:"+longestLine);
-                            }
+                            //Frei:Ignorieren;
+                            CacheFeld = PFeld;
+                        }
+                        else{
+                            //Hier nicht hinsetzen
+                            jaa = false;
+                            //break;
                         }
                         for(int m=0;m<=Dim-1;m++){
                             P[m] += D[m];
                         }
+                    }
+                    if(zaehler > longestLine && jaa){
+                        longestLine = zaehler;
+                        BitteZiehen=CacheFeld;
+                        BitteZiehen.setSpieler(0);
+                        BitteZiehen.setReihe(longestLine);
+                        //System.out.println("LL:"+longestLine);
                     }
                 }
             }

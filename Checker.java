@@ -60,7 +60,6 @@ java.io.Serializable
                     if(zaehler == Dim+1)
                     {
                         gewonnen = true;
-                        System.out.println(""+GewonnenMit);
                     }
                     else{
                         GewonnenMit.clear();
