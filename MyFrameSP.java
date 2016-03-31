@@ -18,7 +18,6 @@ public class MyFrameSP extends JFrame implements ActionListener
     JMenuBar menueLeiste;
     JMenu datei;
     JMenu TTT;
-    JMenuItem beenden;
     JMenuItem showAll;
     JMenuItem resetOutput;
     JMenuItem reset;
@@ -162,8 +161,6 @@ public class MyFrameSP extends JFrame implements ActionListener
         menueLeiste = new JMenuBar();
         datei = new JMenu("Datei");
         TTT = new JMenu("TTT");
-        beenden = new JMenuItem("beenden");
-        beenden.addActionListener(this);
         reset = new JMenuItem("reset");
         reset.addActionListener(this);
         showAll = new JMenuItem("Zeige Alle Züge");
@@ -172,7 +169,6 @@ public class MyFrameSP extends JFrame implements ActionListener
         resetOutput.addActionListener(this);
         menueLeiste.add(datei);
         menueLeiste.add(TTT);
-        datei.add(beenden);
         datei.add(reset);
         TTT.add(showAll);
         TTT.add(resetOutput);
@@ -186,10 +182,7 @@ public class MyFrameSP extends JFrame implements ActionListener
     }
 
     public void actionPerformed(ActionEvent event)
-    {        
-        if (event.getSource() == beenden){
-            this.dispose();
-        }
+    {    
         if (event.getSource() == showAll){
             toe.toJText(output);
         }
