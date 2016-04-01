@@ -5,9 +5,9 @@ public class SimpleKI
     int Dim = 4;
     public SimpleKI()
     {
-        
+
     }
-    
+
     public SimpleKI(int Dim)
     {
         this.Dim = Dim;
@@ -41,7 +41,7 @@ public class SimpleKI
             return randF(toe);
         }
     }
-    
+
     public Feld setze(TicTacToe toe, int sp)
     {
         if(toe.Felder.size() > 1){
@@ -55,7 +55,7 @@ public class SimpleKI
                 System.out.println("FastGegner");
                 return FastGegner;
             }
-            Feld LL = FindLargestLine(toe.Felder,sp);
+            Feld LL = FindLargestLineThread(toe.Felder,sp);
             if(LL.spieler() == 0){
                 System.out.println("LL");
                 return LL;
@@ -187,7 +187,6 @@ public class SimpleKI
     }
 
     private Feld FindLargestLine(ArrayList<Feld> Felder,int sp){
-        boolean breaking = false;
         int[] P = new int[Felder.get(0).getK().size()];
         int[] D = new int[Felder.get(0).getK().size()];
         Feld BitteZiehen = new Feld();
@@ -257,6 +256,22 @@ public class SimpleKI
         return BitteZiehen;
     }
 
+    private Feld FindLargestLineThread(ArrayList<Feld> Felder,int sp){
+        LLT LLT = new LLT(Felder.size()+1,Dim,Felder,sp);
+        Feld BitteZiehen = new Feld();
+        BitteZiehen.setSpieler(-1);
+        int LL = 0;
+        if(!(LLT.Possible == null)){
+            for(int i=0;i<LLT.Possible.size();i++){
+                if(LLT.Possible.get(i).gR() > LL){
+                    LL = LLT.Possible.get(i).gR();
+                    BitteZiehen = LLT.Possible.get(i);
+                }
+            }
+        }
+        return BitteZiehen;
+    }
+
     private int Spielfeld(Feld feld,ArrayList<Feld> Felder){
         for(int i=0;i<Felder.size();i++){
             int zähler = 0;
@@ -270,5 +285,121 @@ public class SimpleKI
         }
         return -1;
     }
+}
 
+class LLT implements Runnable
+{
+    public ArrayList<Thread> threads = new ArrayList<Thread>();
+    int Dim;
+    ArrayList<Feld> Felder;
+    int sp;
+    ArrayList<Feld> Possible = new ArrayList<Feld>();
+
+    LLT(int LTs,int Dim,ArrayList<Feld> Felder,int sp)
+    { 
+        this.Felder = Felder;
+        this.sp = sp;
+        this.Dim = Dim;
+        for(int i=0;i<LTs-1;i++){
+            threads.add(new Thread(this, ""+i));
+            threads.get(i).start();
+        }
+        try{
+            for (Thread thread : threads) {
+                thread.join();
+            }
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public void run()
+    {
+        int var = Integer.parseInt(Thread.currentThread().getName())+1;
+        int[] P = new int[Felder.get(0).getK().size()];
+        int[] D = new int[Felder.get(0).getK().size()];
+        Feld letztesFeld = Felder.get(Felder.size()-var);
+        
+        Feld BitteZiehen = new Feld();
+        int longestLine = 0;
+        BitteZiehen.setSpieler(-1);
+        for(int j=0; j<(int)(Math.pow(3,Dim-1)/2)+Math.pow(3,Dim-1) ; j++){
+            for (int i=0;i<Dim;i++){
+                if( (j/(int)(Math.pow(3,i))) % 3 == 0){P[i] = 0;D[i] = 1;}
+                else if((j/(int)(Math.pow(3,i)))%3==1){P[i] = letztesFeld.gC(i);D[i] = 0;}
+                else{P[i] = Dim;D[i] = -1;}
+            }
+            for(int i=0; i<Felder.size() -1;i++){
+                int zähler = 0;
+                for(int h=0;h<Dim;h++){
+                    if(letztesFeld.gC(h) + D[h] == Felder.get(i).gC(h)){
+                        zähler++;
+                    }
+                }
+                int zähler2 = 0;
+                for(int h=0;h<Dim;h++){
+                    if(letztesFeld.gC(h) - D[h] == Felder.get(i).gC(h)){
+                        zähler2++;
+                    }
+                }
+                boolean jaa=true;
+                for (int m=0;m<Dim;m++){
+                    if( (j/(int)(Math.pow(3,m))) % 3 == 0){P[m] = 0;}
+                    else if((j/(int)(Math.pow(3,m)))%3==1){P[m] = letztesFeld.gC(m);}
+                    else{P[m] = Dim;}
+                }
+                int zaehler = 0;
+                Feld CacheFeld = new Feld();
+                for(int k=0;k<Dim+1;k++){
+                    ArrayList<Integer> PArray = new ArrayList<Integer>();
+                    for(int m=0;m<Dim;m++){
+                        PArray.add(P[m]);
+                    }
+                    Feld PFeld = new Feld(PArray);
+                    if(Spielfeld(PFeld,Felder) == sp){
+                        zaehler ++;
+                    }
+                    else if(Spielfeld(PFeld,Felder) == -1){
+                        //Frei:Ignorieren;
+                        CacheFeld = PFeld;
+                    }
+                    else{
+                        //Hier nicht hinsetzen
+                        jaa = false;
+                        //break;
+                    }
+                    for(int m=0;m<=Dim-1;m++){
+                        P[m] += D[m];
+                    }
+                }
+                if(zaehler > longestLine && jaa){
+                    longestLine = zaehler;
+                    BitteZiehen=CacheFeld;
+                    BitteZiehen.setSpieler(0);
+                    BitteZiehen.setReihe(longestLine);
+                    if(BitteZiehen.getSpieler() == 0){
+                        System.out.println("Possible: "+BitteZiehen);
+                        Possible.add(BitteZiehen);
+                    }
+                    //System.out.println("LL:"+longestLine);
+                }
+            }
+        }
+        //System.out.println("mythread run is over" );
+    }
+
+    private int Spielfeld(Feld feld,ArrayList<Feld> Felder){
+        for(int i=0;i<Felder.size();i++){
+            int zähler = 0;
+            for(int j=0;j<Felder.get(i).getK().size();j++){
+                if(Felder.get(i).gC(j) == feld.gC(j))
+                    zähler++;
+            }
+            if(zähler == Felder.get(i).getK().size()){
+                return Felder.get(i).spieler();
+            }
+        }
+        return -1;
+    }
 }
