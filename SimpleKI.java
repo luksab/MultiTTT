@@ -18,48 +18,58 @@ public class SimpleKI
         if(toe.Felder.size() > 1){
             Feld FastIch = fast(toe.Felder,2);
             if(FastIch.spieler() == 0){
+                System.out.println("FastIch");
                 return FastIch;
             }
             Feld FastGegner = fast(toe.Felder,1);
             if(FastGegner.spieler() == 0){
+                System.out.println("FastGegner");
                 return FastGegner;
             }
             Feld LL = FindLargestLine(toe.Felder,1);
             if(LL.spieler() == 0){
+                System.out.println("LL");
                 return LL;
             }
             else{
+                System.out.println("RandFLL");
                 return randF(toe);
             }
         }
         else{
+            System.out.println("RandF");
             return randF(toe);
         }
     }
     
-    public Feld setzeZ(TicTacToe toe)
+    public Feld setze(TicTacToe toe, int sp)
     {
         if(toe.Felder.size() > 1){
-            Feld FastIch = fast(toe.Felder,1);
+            Feld FastIch = fast(toe.Felder,2);
             if(FastIch.spieler() == 0){
+                System.out.println("FastIch");
                 return FastIch;
             }
-            Feld FastGegner = fast(toe.Felder,2);
+            Feld FastGegner = fast(toe.Felder,1);
             if(FastGegner.spieler() == 0){
+                System.out.println("FastGegner");
                 return FastGegner;
             }
-            Feld LL = FindLargestLine(toe.Felder,0);
+            Feld LL = FindLargestLine(toe.Felder,sp);
             if(LL.spieler() == 0){
+                System.out.println("LL");
                 return LL;
             }
             else{
+                System.out.println("RandFLL");
                 return randF(toe);
             }
         }
         else{
+            System.out.println("RandF");
             return randF(toe);
         }
-    }
+    }    
 
     private Feld randF(TicTacToe toe){
         ArrayList<Integer> Koord = new ArrayList<Integer>();

@@ -70,7 +70,7 @@ java.io.Serializable
         }
         return gewonnen;
     }
-    
+
     public ArrayList<Feld> GetWin(ArrayList<Feld> Felder){
         boolean gewonnen = false;
         int Dim = Felder.get(0).getK().size();

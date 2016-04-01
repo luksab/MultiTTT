@@ -277,13 +277,14 @@ public class MyFrameSP extends JFrame implements ActionListener
         Feld feld = new Feld ();
         boolean SpielerDran = false;
         while(!SpielZuende){
+            long startTime = System.nanoTime();
             if(SpielerDran){
-                feld = KI.setze(toe);
+                feld = KI.setze(toe,1);
                 feld.setSpieler(1);
                 SpielerDran = false;
             }
             else{
-                feld = KI.setzeZ(toe);
+                feld = KI.setze(toe,0);
                 feld.setSpieler(0);
                 SpielerDran = true;
             }
@@ -300,6 +301,8 @@ public class MyFrameSP extends JFrame implements ActionListener
                     output.writeLine("UnEntSchieden");
                 }
             }
+            double endTime = System.nanoTime();
+            System.out.println("KI : "+(endTime - startTime)/1000000);
         }
     }
 
