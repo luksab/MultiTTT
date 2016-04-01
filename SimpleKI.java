@@ -2,14 +2,19 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.*;
 public class SimpleKI
 {
+    int Dim = 4;
     public SimpleKI()
     {
-
+        
+    }
+    
+    public SimpleKI(int Dim)
+    {
+        this.Dim = Dim;
     }
 
     public Feld setze(TicTacToe toe)
     {
-        int Dim = toe.Felder.get(0).getK().size();
         if(toe.Felder.size() > 1){
             Feld FastIch = fast(toe.Felder,2);
             if(FastIch.spieler() == 0){
@@ -19,7 +24,31 @@ public class SimpleKI
             if(FastGegner.spieler() == 0){
                 return FastGegner;
             }
-            Feld LL = FindLargestLine(toe.Felder);
+            Feld LL = FindLargestLine(toe.Felder,1);
+            if(LL.spieler() == 0){
+                return LL;
+            }
+            else{
+                return randF(toe);
+            }
+        }
+        else{
+            return randF(toe);
+        }
+    }
+    
+    public Feld setzeZ(TicTacToe toe)
+    {
+        if(toe.Felder.size() > 1){
+            Feld FastIch = fast(toe.Felder,1);
+            if(FastIch.spieler() == 0){
+                return FastIch;
+            }
+            Feld FastGegner = fast(toe.Felder,2);
+            if(FastGegner.spieler() == 0){
+                return FastGegner;
+            }
+            Feld LL = FindLargestLine(toe.Felder,0);
             if(LL.spieler() == 0){
                 return LL;
             }
@@ -33,7 +62,6 @@ public class SimpleKI
     }
 
     private Feld randF(TicTacToe toe){
-        int Dim = toe.Felder.get(0).getK().size();
         ArrayList<Integer> Koord = new ArrayList<Integer>();
         boolean ja = false;
         if(Dim%2 == 0){
@@ -84,7 +112,6 @@ public class SimpleKI
     private Feld fast(ArrayList<Feld> Felder,int IOD){
         boolean fast = false;
         boolean breaking = false;
-        int Dim = Felder.get(0).getK().size();
         Feld letztesFeld = Felder.get(Felder.size()-IOD);
         int[] P = new int[Felder.get(0).getK().size()];
         int[] D = new int[Felder.get(0).getK().size()];
@@ -149,12 +176,10 @@ public class SimpleKI
         return BitteZiehen;
     }
 
-    private Feld FindLargestLine(ArrayList<Feld> Felder){
+    private Feld FindLargestLine(ArrayList<Feld> Felder,int sp){
         boolean breaking = false;
-        int Dim = Felder.get(0).getK().size();
         int[] P = new int[Felder.get(0).getK().size()];
         int[] D = new int[Felder.get(0).getK().size()];
-        int sp = 1;
         Feld BitteZiehen = new Feld();
         int longestLine = 0;
         BitteZiehen.setSpieler(-1);

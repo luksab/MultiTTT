@@ -21,6 +21,7 @@ public class MyFrameSP extends JFrame implements ActionListener
     JMenuItem showAll;
     JMenuItem resetOutput;
     JMenuItem reset;
+    JMenuItem Ki;
 
     private int spieler = 0;
     private int ich = 0;
@@ -43,12 +44,13 @@ public class MyFrameSP extends JFrame implements ActionListener
     private int breiteLinks = 200 - 2*dxy;
     private int breiteRechts;
     private int hoeheRechts;
-    private SimpleKI KI = new SimpleKI();
+    private SimpleKI KI;
     private int Dim;
 
     public MyFrameSP(int Dim)
     {   
         this.Dim = Dim;
+        KI = new SimpleKI(Dim);
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         width = gd.getDisplayMode().getWidth();
         height = gd.getDisplayMode().getHeight()-50;
@@ -163,6 +165,8 @@ public class MyFrameSP extends JFrame implements ActionListener
         TTT = new JMenu("TTT");
         reset = new JMenuItem("reset");
         reset.addActionListener(this);
+        Ki = new JMenuItem("KiBattle");
+        Ki.addActionListener(this);
         showAll = new JMenuItem("Zeige Alle Züge");
         showAll.addActionListener(this);
         resetOutput = new JMenuItem("reset Ausgabe");
@@ -172,6 +176,7 @@ public class MyFrameSP extends JFrame implements ActionListener
         datei.add(reset);
         TTT.add(showAll);
         TTT.add(resetOutput);
+        TTT.add(Ki);
         this.setJMenuBar(menueLeiste);
 
         this.setVisible(true);
@@ -191,6 +196,9 @@ public class MyFrameSP extends JFrame implements ActionListener
         }
         if (event.getSource() == reset){
             reset();
+        }
+        if (event.getSource() == Ki){
+            KiBattle();
         }
         for(int i=0;i<Math.pow(Dim+1,Dim);i++){
             MyButton Button = Buttons.get(i);
@@ -265,6 +273,36 @@ public class MyFrameSP extends JFrame implements ActionListener
         toe.reset();
     }
 
+    public void KiBattle(){
+        Feld feld = new Feld ();
+        boolean SpielerDran = false;
+        while(!SpielZuende){
+            if(SpielerDran){
+                feld = KI.setze(toe);
+                feld.setSpieler(1);
+                SpielerDran = false;
+            }
+            else{
+                feld = KI.setzeZ(toe);
+                feld.setSpieler(0);
+                SpielerDran = true;
+            }
+            updateButton(feld);
+            toe.Felder.add(feld);
+            anzahlZüge++;
+            if(toe.Felder.size() > 0){
+                output.writeLine(toe.click(this));
+                if(toe.checkWin()){
+                    SpielZuende = true;
+                }
+                else if(toe.Felder.size() >= Math.pow(Dim+1,Dim)){
+                    SpielZuende = true;
+                    output.writeLine("UnEntSchieden");
+                }
+            }
+        }
+    }
+
     public void updateButton(Feld feld){
         int i = 0;
         int v = Dim;
@@ -274,7 +312,7 @@ public class MyFrameSP extends JFrame implements ActionListener
         }
         Buttons.get(i).update(farbeSpieler.get(feld.spieler()));
     }
-    
+
     public void updateButton(Feld feld,Color farbe){
         int i = 0;
         int v = Dim;

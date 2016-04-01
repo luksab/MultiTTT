@@ -46,7 +46,7 @@ public class MyFrameMulti extends JFrame implements ActionListener
     public MyFrameMulti(int Dim)
     {   
         this.Dim = Dim;
-        KI = new SimpleKI();
+        KI = new SimpleKI(Dim);
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         width = gd.getDisplayMode().getWidth();
         height = gd.getDisplayMode().getHeight()-50;
