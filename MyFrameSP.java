@@ -2,6 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 public class MyFrameSP extends JFrame implements ActionListener
 {
@@ -14,6 +15,7 @@ public class MyFrameSP extends JFrame implements ActionListener
     MyScrollingTextArea output;
     ArrayList<MyButton> Buttons = new ArrayList<MyButton>();
     TicTacToe toe;
+    MyButton Button;
 
     JMenuBar menueLeiste;
     JMenu datei;
@@ -23,13 +25,11 @@ public class MyFrameSP extends JFrame implements ActionListener
     JMenuItem reset;
     JMenuItem Ki;
 
-    private int spieler = 0;
-    private int ich = 0;
-    private int du;
+    private int SpielerDran = 0;
+    private int NSpielerDran = 1;
     public long anzahlZüge = 0;
     private boolean darfIch = true;
     private boolean SpielZuende = false;
-    private boolean angemeldet = false;
     private String Email;
     private String SpielerIch;
     private String SpielerDu;
@@ -50,7 +50,6 @@ public class MyFrameSP extends JFrame implements ActionListener
     public MyFrameSP(int Dim)
     {   
         this.Dim = Dim;
-        KI = new SimpleKI(Dim);
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         width = gd.getDisplayMode().getWidth();
         height = gd.getDisplayMode().getHeight()-50;
@@ -82,6 +81,7 @@ public class MyFrameSP extends JFrame implements ActionListener
         workspace.setPreferredSize(new Dimension(935,935));
 
         toe = new TicTacToe(Dim);
+        KI = new SimpleKI(Dim,toe);
 
         if(Dim == 4){
             int xB=0;
@@ -108,6 +108,9 @@ public class MyFrameSP extends JFrame implements ActionListener
                     }
                 }
             }
+            Button = new MyButton(50,950,100,50,"KI");
+            Button.addActionListener(this);
+            workspace.add(Button);
         }
 
         else if(Dim == 3){
@@ -133,6 +136,9 @@ public class MyFrameSP extends JFrame implements ActionListener
                     }
                 }
             }
+            Button = new MyButton(50,600,100,50,"KI");
+            Button.addActionListener(this);
+            workspace.add(Button);
         }
 
         else if(Dim == 2){
@@ -154,6 +160,9 @@ public class MyFrameSP extends JFrame implements ActionListener
                     i++;
                 }
             }
+            Button = new MyButton(50,333,100,50,"KI");
+            Button.addActionListener(this);
+            workspace.add(Button);
         }
 
         scroll = new JScrollPane(workspace);
@@ -198,15 +207,21 @@ public class MyFrameSP extends JFrame implements ActionListener
             reset();
         }
         if (event.getSource() == Ki){
+            while(!SpielZuende){
+                KiBattle();
+            }
+        }
+        if (event.getSource() == Button){
             KiBattle();
         }
         for(int i=0;i<Math.pow(Dim+1,Dim);i++){
             MyButton Button = Buttons.get(i);
             if (event.getSource()==Button){
                 ArrayList<Integer> Koord = Button.gK();
-                Feld feld = new Feld (Koord,ich);
-                if (toe.check(feld) && darfIch && !SpielZuende){
+                Feld feld = new Feld (Koord,SpielerDran);
+                if (toe.check(feld) && !SpielZuende){
                     updateButton(feld);
+                    setSD();
                     toe.Felder.add(feld);
                     anzahlZüge++;
                     if(toe.Felder.size() > 0){
@@ -219,22 +234,6 @@ public class MyFrameSP extends JFrame implements ActionListener
                             SpielZuende = true;
                             output.writeLine("UnEntSchieden");
                         }
-                    }
-                    if(!SpielZuende){
-                        darfIch = false;
-                        feld = KI.setze(toe);
-                        feld.setSpieler(1);
-                        updateButton(feld);
-                        toe.Felder.add(feld);
-                        anzahlZüge++;
-                        if(toe.Felder.size() > 0){
-                            output.writeLine(toe.click(this));
-                            if(toe.checkWin()){
-                                SpielZuende = true;
-                                darfIch = false;
-                            }
-                        }
-                        darfIch = true;
                     }
                 }
                 else {
@@ -273,21 +272,17 @@ public class MyFrameSP extends JFrame implements ActionListener
         toe.reset();
     }
 
+    public void setSD(){
+        if(SpielerDran == 0){SpielerDran = 1; NSpielerDran = 0;}
+        else{SpielerDran = 0; NSpielerDran = 1;}
+    }
+
     public void KiBattle(){
-        Feld feld = new Feld ();
-        boolean SpielerDran = false;
-        long startTime = System.nanoTime();
-        while(!SpielZuende){
-            if(SpielerDran){
-                feld = KI.setze(toe,1);
-                feld.setSpieler(1);
-                SpielerDran = false;
-            }
-            else{
-                feld = KI.setze(toe,0);
-                feld.setSpieler(0);
-                SpielerDran = true;
-            }
+        if(!SpielZuende){
+            Feld feld = new Feld ();
+            long startTime = System.nanoTime();
+            feld = KI.setze(SpielerDran);
+            feld.setSpieler(SpielerDran);
             updateButton(feld);
             toe.Felder.add(feld);
             anzahlZüge++;
@@ -301,9 +296,10 @@ public class MyFrameSP extends JFrame implements ActionListener
                     output.writeLine("UnEntSchieden");
                 }
             }
+            double endTime = System.nanoTime();
+            System.out.println("KI : "+(endTime - startTime)/1000000);
+            setSD();
         }
-        double endTime = System.nanoTime();
-        System.out.println("KI : "+(endTime - startTime)/1000000);
     }
 
     public void updateButton(Feld feld){

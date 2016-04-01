@@ -1,12 +1,14 @@
 #BlueJ class context
 comment0.params=x\ y\ breite\ hoehe
 comment0.target=MyButton(int,\ int,\ int,\ int)
-comment1.params=x\ y\ breite\ hoehe\ Koord
-comment1.target=MyButton(int,\ int,\ int,\ int,\ java.util.ArrayList)
-comment2.params=
-comment2.target=java.util.ArrayList\ gK()
-comment3.params=s
-comment3.target=void\ update(java.lang.String)
-comment4.params=bg
-comment4.target=void\ update(java.awt.Color)
-numComments=5
+comment1.params=x\ y\ breite\ hoehe\ text
+comment1.target=MyButton(int,\ int,\ int,\ int,\ java.lang.String)
+comment2.params=x\ y\ breite\ hoehe\ Koord
+comment2.target=MyButton(int,\ int,\ int,\ int,\ java.util.ArrayList)
+comment3.params=
+comment3.target=java.util.ArrayList\ gK()
+comment4.params=s
+comment4.target=void\ update(java.lang.String)
+comment5.params=bg
+comment5.target=void\ update(java.awt.Color)
+numComments=6

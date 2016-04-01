@@ -1,8 +1,11 @@
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.*;
+import java.util.concurrent.*;
 public class SimpleKI
 {
     int Dim = 4;
+    ArrayList<Feld> Possible;
+    TicTacToe toe;
     public SimpleKI()
     {
 
@@ -11,6 +14,12 @@ public class SimpleKI
     public SimpleKI(int Dim)
     {
         this.Dim = Dim;
+    }
+    
+    public SimpleKI(int Dim, TicTacToe toe)
+    {
+        this.Dim = Dim;
+        this.toe = toe;
     }
 
     public Feld setze(TicTacToe toe)
@@ -70,6 +79,35 @@ public class SimpleKI
             return randF(toe);
         }
     }    
+    
+    public Feld setze(int sp)
+    {
+        if(toe.Felder.size() > 1){
+            Feld FastIch = fast(toe.Felder,2);
+            if(FastIch.spieler() == 0){
+                System.out.println("FastIch");
+                return FastIch;
+            }
+            Feld FastGegner = fast(toe.Felder,1);
+            if(FastGegner.spieler() == 0){
+                System.out.println("FastGegner");
+                return FastGegner;
+            }
+            Feld LL = FindLargestLineThread(toe.Felder,sp);
+            if(LL.spieler() == 0){
+                System.out.println("LL");
+                return LL;
+            }
+            else{
+                System.out.println("RandFLL");
+                return randF(toe);
+            }
+        }
+        else{
+            System.out.println("RandF");
+            return randF(toe);
+        }
+    }   
 
     private Feld randF(TicTacToe toe){
         ArrayList<Integer> Koord = new ArrayList<Integer>();
@@ -257,16 +295,25 @@ public class SimpleKI
     }
 
     private Feld FindLargestLineThread(ArrayList<Feld> Felder,int sp){
-        LLT LLT = new LLT(Felder.size()+1,Dim,Felder,sp);
+        Possible = new ArrayList<Feld>();
         Feld BitteZiehen = new Feld();
         BitteZiehen.setSpieler(-1);
         int LL = 0;
-        if(!(LLT.Possible == null)){
-            for(int i=0;i<LLT.Possible.size();i++){
-                if(LLT.Possible.get(i).gR() > LL){
-                    LL = LLT.Possible.get(i).gR();
-                    BitteZiehen = LLT.Possible.get(i);
-                }
+        ExecutorService threadPool = Executors.newFixedThreadPool(10);
+        for(int i=0;i<Felder.size();i++){
+            threadPool.submit(new LongLine(Felder,sp,i,Dim,this));
+        } 
+        threadPool.shutdown();
+        try {
+            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
+
+        for(int i=0;i<Possible.size();i++){
+            if(Possible.get(i).gR() > LL){
+                LL = Possible.get(i).gR();
+                BitteZiehen = Possible.get(i);
             }
         }
         return BitteZiehen;
@@ -287,43 +334,27 @@ public class SimpleKI
     }
 }
 
-class LLT implements Runnable
-{
-    public ArrayList<Thread> threads = new ArrayList<Thread>();
-    int Dim;
+class LongLine implements Runnable {
     ArrayList<Feld> Felder;
     int sp;
-    ArrayList<Feld> Possible = new ArrayList<Feld>();
-
-    LLT(int LTs,int Dim,ArrayList<Feld> Felder,int sp)
-    { 
+    int var;
+    int Dim;
+    SimpleKI ki;
+    public LongLine(ArrayList<Feld> Felder,int sp,int var,int Dim,SimpleKI ki) {
         this.Felder = Felder;
         this.sp = sp;
+        this.var = var;
         this.Dim = Dim;
-        for(int i=0;i<LTs-1;i++){
-            threads.add(new Thread(this, ""+i));
-            threads.get(i).start();
-        }
-        try{
-            for (Thread thread : threads) {
-                thread.join();
-            }
-        }
-        catch(Exception e){
-            System.out.println(e);
-        }
+        this.ki = ki;
     }
 
-    public void run()
-    {
-        int var = Integer.parseInt(Thread.currentThread().getName())+1;
+    public void run(){
         int[] P = new int[Felder.get(0).getK().size()];
         int[] D = new int[Felder.get(0).getK().size()];
-        Feld letztesFeld = Felder.get(Felder.size()-var);
-        
         Feld BitteZiehen = new Feld();
         int longestLine = 0;
         BitteZiehen.setSpieler(-1);
+        Feld letztesFeld = Felder.get(Felder.size()-var);
         for(int j=0; j<(int)(Math.pow(3,Dim-1)/2)+Math.pow(3,Dim-1) ; j++){
             for (int i=0;i<Dim;i++){
                 if( (j/(int)(Math.pow(3,i))) % 3 == 0){P[i] = 0;D[i] = 1;}
@@ -378,15 +409,11 @@ class LLT implements Runnable
                     BitteZiehen=CacheFeld;
                     BitteZiehen.setSpieler(0);
                     BitteZiehen.setReihe(longestLine);
-                    if(BitteZiehen.getSpieler() == 0){
-                        System.out.println("Possible: "+BitteZiehen);
-                        Possible.add(BitteZiehen);
-                    }
                     //System.out.println("LL:"+longestLine);
                 }
             }
         }
-        //System.out.println("mythread run is over" );
+        ki.Possible.add(BitteZiehen);
     }
 
     private int Spielfeld(Feld feld,ArrayList<Feld> Felder){

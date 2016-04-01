@@ -21,6 +21,17 @@ public class MyButton extends JButton
         this.setHorizontalAlignment(CENTER);    
     }
     
+    MyButton(int x,int y,int breite,int hoehe,String text)
+    {
+        this.breite = breite;
+        this.setForeground(Color.black);
+        this.setBackground(farbe);
+        this.setLocation(y, x);
+        this.setSize(breite, hoehe);
+        this.setHorizontalAlignment(CENTER);  
+        this.setText(text);
+    }
+    
     MyButton(int x,int y,int breite,int hoehe,ArrayList<Integer> Koord)
     {
         this.breite = breite;
@@ -38,7 +49,7 @@ public class MyButton extends JButton
         return Koord;
     }
     
-        public void update(String s){
+    public void update(String s){
         this.setText(s);      
     }
 
