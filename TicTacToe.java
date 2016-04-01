@@ -86,9 +86,10 @@ public class TicTacToe
         }
         else{
             s = "Spieler "+feld.spieler()+" hat auf das Feld ";
-            for(int i=0;i<Dim;i++){
+            for(int i=0;i<Dim-1;i++){
                 s += feld.gC(i)+"|";
             }
+            s += feld.gC(Dim-1);
             s += " gesetzt";
         }
         return s;
@@ -107,9 +108,10 @@ public class TicTacToe
         }
         else{
             s = "Spieler "+feld.spieler()+" hat auf das Feld ";
-            for(int i=0;i<Dim;i++){
+            for(int i=0;i<Dim-1;i++){
                 s += feld.gC(i)+"|";
             }
+            s += feld.gC(Dim-1);
             s += " gesetzt";
         }
         return s;
