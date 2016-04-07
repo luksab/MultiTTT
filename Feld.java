@@ -10,12 +10,12 @@ public class Feld
         Koord = NKoord;
         spieler=spielerNeu;
     }
-    
+
     public Feld(ArrayList<Integer> NKoord)
     {
         Koord = NKoord;
     }
-    
+
     public Feld(int Nreihe,ArrayList<Integer> NKoord)
     {
         Koord = NKoord;
@@ -35,7 +35,7 @@ public class Feld
     public int gC(int a){
         return Koord.get(a);
     }
-    
+
     public int gR(){
         return reihe;
     }
@@ -49,12 +49,12 @@ public class Feld
     {
         return spieler;
     }
-    
+
     public void setSpieler(int NSpieler)
     {
         spieler = NSpieler;
     }
-    
+
     public void setReihe(int Nreihe)
     {
         reihe = Nreihe;
@@ -62,10 +62,12 @@ public class Feld
 
     public String toString(){
         String s = ""+"Spieler: "+spieler+" Koordinaten: ";
-        for(int i=0;i<Koord.size()-1;i++){
-            s += +Koord.get(i)+"|";
+        if(Koord.size()>0){
+            for(int i=0;i<Koord.size()-1;i++){
+                s += +Koord.get(i)+"|";
+            }
+            s += +Koord.get(Koord.size()-1);
         }
-        s += +Koord.get(Koord.size()-1);
         return s;
     }
 }

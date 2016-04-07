@@ -243,6 +243,7 @@ public class MyFrameSP extends JFrame implements ActionListener
                     s += " setzen!";
                     output.writeLine(s);
                 }
+                KiBattle();
                 break;
             }
         } 
