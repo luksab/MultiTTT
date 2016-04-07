@@ -320,7 +320,6 @@ public class SimpleKI
     }
 
     private Feld Zwickmühle(ArrayList<Feld> Felder,int sp){
-        System.out.println("Zwickmühle");
         int[] P = new int[Felder.get(0).getK().size()];
         int[] D = new int[Felder.get(0).getK().size()];
         ArrayList<ZweiFeld> Reihen = new ArrayList<ZweiFeld>();
