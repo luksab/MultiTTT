@@ -234,6 +234,7 @@ public class MyFrameSP extends JFrame implements ActionListener
                             output.writeLine("UnEntSchieden");
                         }
                     }
+                    KiBattle();
                 }
                 else {
                     String s = "Du kannst nicht in das Feld ";
@@ -243,7 +244,6 @@ public class MyFrameSP extends JFrame implements ActionListener
                     s += " setzen!";
                     output.writeLine(s);
                 }
-                KiBattle();
                 break;
             }
         } 
