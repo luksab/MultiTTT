@@ -3,7 +3,6 @@ import javax.swing.*;
 
 public class StarteSP
 {
-    static MyFrame f;
     static MyFrameSP s;
     static MyFrameMulti m;
 
