@@ -23,12 +23,14 @@ public class MyFrameSP extends JFrame implements ActionListener
     JMenuItem resetOutput;
     JMenuItem reset;
     JMenuItem Ki;
+    JMenuItem SP;
 
     private int SpielerDran = 0;
     private int NSpielerDran = 1;
     public long anzahlZüge = 0;
     private boolean darfIch = true;
     private boolean SpielZuende = false;
+    private boolean Sp = false;
     private String Email;
     private String SpielerIch;
     private String SpielerDu;
@@ -173,6 +175,8 @@ public class MyFrameSP extends JFrame implements ActionListener
         TTT = new JMenu("TTT");
         reset = new JMenuItem("reset");
         reset.addActionListener(this);
+        SP = new JMenuItem("SinglePlayer");
+        SP.addActionListener(this);
         Ki = new JMenuItem("KiBattle");
         Ki.addActionListener(this);
         showAll = new JMenuItem("Zeige Alle Züge");
@@ -185,6 +189,7 @@ public class MyFrameSP extends JFrame implements ActionListener
         TTT.add(showAll);
         TTT.add(resetOutput);
         TTT.add(Ki);
+        TTT.add(SP);
         this.setJMenuBar(menueLeiste);
 
         this.setVisible(true);
@@ -204,6 +209,9 @@ public class MyFrameSP extends JFrame implements ActionListener
         }
         if (event.getSource() == reset){
             reset();
+        }
+        if (event.getSource() == SP){
+            Sp = !Sp;
         }
         if (event.getSource() == Ki){
             while(!SpielZuende){
@@ -234,7 +242,9 @@ public class MyFrameSP extends JFrame implements ActionListener
                             output.writeLine("UnEntSchieden");
                         }
                     }
-                    KiBattle();
+                    if(Sp){
+                        KiBattle();
+                    }
                 }
                 else {
                     String s = "Du kannst nicht in das Feld ";
@@ -250,6 +260,8 @@ public class MyFrameSP extends JFrame implements ActionListener
     }
 
     public void reset(){
+        SpielerDran = 0;
+        NSpielerDran = 1;
         anzahlZüge = 0;
         darfIch = true;
         SpielZuende = false;
