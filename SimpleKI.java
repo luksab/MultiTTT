@@ -27,31 +27,33 @@ public class SimpleKI
         if(toe.Felder.size() > 1){
             Feld FastIch = fast(toe.Felder,2);
             if(FastIch.spieler() == 0){
-                System.out.println("FastIch");
+                FastIch.setNote("FastIch");
                 return FastIch;
             }
             Feld FastGegner = fast(toe.Felder,1);
             if(FastGegner.spieler() == 0){
-                System.out.println("FastGegner");
+                FastGegner.setNote("FastGegner");
                 return FastGegner;
             }
             Feld Zwickmühle = Zwickmühle(toe.Felder,0);
             if(Zwickmühle.spieler() == 0){
-                System.out.println("Zwickmühle");
+                Zwickmühle.setNote("Zwickmühle");
                 return Zwickmühle;
             }
             Feld LL = FindLargestLine(toe.Felder,2);
             if(LL.spieler() == 0){
-                System.out.println("LL");
+                LL.setNote("LL");
                 return LL;
             }
             else{
-                System.out.println("RandFLL");
+                Feld randf = randF(toe);
+                randf.setNote("randF");
                 return randF(toe);
             }
         }
         else{
-            System.out.println("RandF");
+            Feld randf = randF(toe);
+            randf.setNote("randF");
             return randF(toe);
         }
     }
@@ -66,31 +68,33 @@ public class SimpleKI
         if(toe.Felder.size() > 1){
             Feld FastIch = fast(toe.Felder,2);
             if(FastIch.spieler() == 0){
-                System.out.println("FastIch");
+                FastIch.setNote("FastIch");
                 return FastIch;
             }
             Feld FastGegner = fast(toe.Felder,1);
             if(FastGegner.spieler() == 0){
-                System.out.println("FastGegner");
+                FastIch.setNote("FastIch");
                 return FastGegner;
             }
             Feld Zwickmühle = Zwickmühle(toe.Felder,gg);
             if(Zwickmühle.spieler() == 0){
-                System.out.println("Zwickmühle");
+                Zwickmühle.setNote("Zwickmühle");
                 return Zwickmühle;
             }
             Feld LL = FindLargestLineThread(toe.Felder,sp);
             if(LL.spieler() == 0){
-                System.out.println("LL");
+                LL.setNote("LL");
                 return LL;
             }
             else{
-                System.out.println("RandFLL");
+                Feld randf = randF(toe);
+                randf.setNote("randF");
                 return randF(toe);
             }
         }
         else{
-            System.out.println("RandF");
+            Feld randf = randF(toe);
+            randf.setNote("randF");
             return randF(toe);
         }
     }    
@@ -105,31 +109,33 @@ public class SimpleKI
         if(toe.Felder.size() > 1){
             Feld FastIch = fast(toe.Felder,2);
             if(FastIch.spieler() == 0){
-                System.out.println("FastIch");
+                FastIch.setNote("FastIch");
                 return FastIch;
             }
             Feld FastGegner = fast(toe.Felder,1);
             if(FastGegner.spieler() == 0){
-                System.out.println("FastGegner");
+                FastGegner.setNote("FastGegner");
                 return FastGegner;
             }
             Feld Zwickmühle = Zwickmühle(toe.Felder,gg);
             if(Zwickmühle.spieler() == 0){
-                System.out.println("Zwickmühle");
+                Zwickmühle.setNote("Zwickmühle");
                 return Zwickmühle;
             }
             Feld LL = FindLargestLineThread(toe.Felder,sp);
             if(LL.spieler() == 0){
-                System.out.println("LL");
+                LL.setNote("LL");
                 return LL;
             }
             else{
-                System.out.println("RandFLL");
+                Feld randf = randF(toe);
+                randf.setNote("randF");
                 return randF(toe);
             }
         }
         else{
-            System.out.println("RandF");
+            Feld randf = randF(toe);
+            randf.setNote("randF");
             return randF(toe);
         }
     }   
@@ -179,7 +185,6 @@ public class SimpleKI
             ja = toe.check(new Feld(Koord));
         }
         return new Feld(Koord);
-
     }
 
     private Feld fast(ArrayList<Feld> Felder,int IOD){

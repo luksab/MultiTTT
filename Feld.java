@@ -4,6 +4,7 @@ public class Feld
     private ArrayList<Integer> Koord = new ArrayList<Integer>();
     private int spieler;
     private int reihe;
+    private String note = "";
 
     public Feld(ArrayList<Integer> NKoord,int spielerNeu)
     {
@@ -25,6 +26,14 @@ public class Feld
     public Feld()
     {
 
+    }
+    
+    public String getNote(){
+        return note;
+    }
+    
+    public void setNote(String nNote){
+        note = nNote;
     }
 
     public ArrayList getK()

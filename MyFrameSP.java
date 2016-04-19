@@ -287,6 +287,7 @@ public class MyFrameSP extends JFrame implements ActionListener
             toe.Felder.add(feld);
             anzahlZüge++;
             if(toe.Felder.size() > 0){
+                output.writeLine(feld.getNote());
                 output.writeLine(toe.click(this));
                 if(toe.checkWin()){
                     SpielZuende = true;
