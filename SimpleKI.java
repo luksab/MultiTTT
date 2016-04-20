@@ -475,8 +475,8 @@ class ZweiFeld{
                 if(F.get(0).gC(j) == ander.F.get(i).gC(j))
                     zähler++;
             }
-            if(zähler == F.get(0).getK().size()-1){
-                return 0;
+            if(zähler == F.get(0).getK().size()){
+                return (byte)(0);
             }
 
             zähler = 0;
@@ -484,8 +484,8 @@ class ZweiFeld{
                 if(F.get(0).gC(j) == ander.F.get(i).gC(j))
                     zähler++;
             }
-            if(zähler == F.get(0).getK().size()-1){
-                return 1;
+            if(zähler == F.get(0).getK().size()){
+                return (byte)(1);
             }
         }
         return -1;
