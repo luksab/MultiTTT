@@ -2,7 +2,9 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
-import com.firebase.client.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.InetSocketAddress;
 
 public class MyFrame extends JFrame implements ActionListener
 {
@@ -27,10 +29,10 @@ public class MyFrame extends JFrame implements ActionListener
     JMenuItem ChPW;
     JMenuItem DelFire;
 
-    private Firebase fire;
-    private Firebase fireSpiel;
+    //Websocket
+    private Client socket;
     private int spieler = 0;
-    private int ich = -1;
+    public  int ich = -1;
     private int du;
     private int TesteNachSpieler = -1;
     private int spiel = -1;
@@ -121,141 +123,32 @@ public class MyFrame extends JFrame implements ActionListener
 
         this.setVisible(true);
 
-        fire = new Firebase("https://blistering-fire-5630.firebaseIO.com/");
+        //connect To Websocket Server
+        try{
+            //socket = new Client(new URI("ws://"+Login[0]+""), this);}
+            socket = new Client(new URI("ws://37.201.48.224:8887"), this);}
+        catch(URISyntaxException e){}
+        //eventListener
 
-        fire.authWithPassword(Login[0], Login[1], new Firebase.AuthResultHandler() {
-                @Override
-                public void onAuthenticated(AuthData authData) {
-                    System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
-                    Email = ""+authData.getProviderData().get("email");
-                    angemeldet = true;
-                }
-
-                @Override
-                public void onAuthenticationError(FirebaseError firebaseError) {
-                    output.writeLine(""+firebaseError);
-                    //System.out.println("FireBase is kaputt"+firebaseError);
-                }
-            });
-
-        //eventListener           
-
-        //listen Once
-        fire.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) /*InterruptedException*/ {
-                    try {
-                        while(!angemeldet)
-                            Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        System.out.println("Thread.sleep(50); ist kaputt, weil "+e.getMessage());
-                    }
-
-                    boolean breaking = false;
-                    for(int i=0;i<snapshot.child("Spiele").getChildrenCount()+1;i++){
-                        for(int j=0;j<2;j++){
-                            if(snapshot.child("Spiele").child(""+i).child("Spieler "+j).getValue() == null){
-                                System.out.println("I:"+i);
-                                fireSpiel = new Firebase("https://blistering-fire-5630.firebaseIO.com/Spiele/"+i);
-                                fireSpiel.child("Spieler "+j).setValue(Email);
-                                ich = j;
-                                if(ich == 0){
-                                    du  = 1;
-                                }
-                                else{ 
-                                    du = 0;
-                                }
-                                if(snapshot.child("Spieler "+du).exists()){
-                                    SpielerDu = snapshot.child("Spieler "+du).getValue(String.class);
-                                }
-                                else{
-                                    SpielerDu = "Leer";
-                                }
-                                spiel=i;
-                                breaking = true;
-                                break;
-                            }
-                        }
-                        if(breaking){break;}
-                    }
-                    output.writeLine("Du bist im Spiel "+spiel+", als Spieler "+ich+" gelandet.");
-                    fireSpiel.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot snapshot) {
-                                SpielerIch = snapshot.child("Spieler "+ich).getValue(String.class);
-                                SpielerDu = snapshot.child("Spieler "+du).getValue(String.class);
-                                if(toe.Felder.size() +1 == snapshot.child("Feld").getChildrenCount()){
-                                    Feld feld = snapshot.child("Feld").child(""+toe.Felder.size()).getValue(Feld.class);
-                                    updateButton(feld);
-                                    toe.Felder.add(feld);
-                                    anzahlZüge = snapshot.child("Feld").getChildrenCount();
-                                    if(toe.Felder.size() > 0){
-                                        output.writeLine(toe.click());
-                                        if(toe.checkWin()){
-                                            SpielZuende = true;
-                                            darfIch = false;
-                                        }
-                                    }
-                                }
-                                else if(snapshot.child("Feld").getChildrenCount() == toe.Felder.size()){}
-                                else{
-                                    for(int i=0;i<625;i++) {
-                                        Buttons.get(i).update(farbeSpieler.get(2));
-                                    }
-                                    toe.Felder.clear();
-                                    anzahlZüge = snapshot.child("Feld").getChildrenCount();
-                                    for(int i=0;i<snapshot.child("Feld").getChildrenCount();i++){
-                                        Feld feld = snapshot.child("Feld").child(""+i).getValue(Feld.class);
-                                        updateButton(feld);
-                                        toe.Felder.add(feld);
-                                        if(toe.Felder.size() > 0){
-                                            output.writeLine(toe.click());
-                                            if(toe.checkWin()){
-                                                SpielZuende = true;
-                                                darfIch = false;
-                                            }
-                                        }
-                                    }
-                                }
-                                if(toe.Felder.size() > 0){
-                                    if(toe.Felder.get(toe.Felder.size() - 1).spieler() != ich){darfIch = true;}
-                                }
-                                if(ich == 0 && toe.Felder.size() == 0){darfIch = true;}
-                            }
-
-                            @Override
-                            public void onCancelled(FirebaseError firebaseError) {
-                                System.out.println("The read failed: " + firebaseError.getMessage());
-                            }
-                        });
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-                    System.out.println("The read failed: " + firebaseError.getMessage());
-                }
-            });
-
-    } 
-
-    public void löscheFirebase(){
-        fire.setValue(null);
     }
 
     public String[] LoginBox(){
         JTextField EMail = new JTextField();
+        JTextField Server = new JTextField();
         JPasswordField Passwd = new JPasswordField();
-        Object[] message = {"E-Mail", EMail, 
+        Object[] message = {"Server",Server,"E-Mail", EMail, 
                 "Passwort", Passwd};
+        Server.setText("luksab.de:8887");
 
         JOptionPane pane = new JOptionPane( message, 
                 JOptionPane.PLAIN_MESSAGE, 
                 JOptionPane.OK_CANCEL_OPTION);
-        pane.createDialog(null, "FireBase Login").setVisible(true);
-        String[] Login = new String[2];
-        if(!EMail.equals("") && !(Passwd.getPassword().length == 0)){
-            Login[0] = EMail.getText();
-            Login[1] = new String(Passwd.getPassword());
+        pane.createDialog(null, "Login").setVisible(true);
+        String[] Login = new String[3];
+        if(!Server.equals("")){
+            Login[0] = Server.getText();
+            Login[1] = EMail.getText();
+            Login[2] = new String(Passwd.getPassword());
             return Login;
         }
         else{
@@ -280,7 +173,7 @@ public class MyFrame extends JFrame implements ActionListener
         return Login;
     }
 
-    public static void main(String[] args){        
+    public static void main(String[] args) throws URISyntaxException{        
         new MyFrame();
     }
 
@@ -288,10 +181,10 @@ public class MyFrame extends JFrame implements ActionListener
     {        
         if (event.getSource() == beenden){
             if(SpielerDu == "Leer"){
-                fireSpiel.setValue(null);
+                //fireSpiel.setValue(null);
             }
             else{
-                fireSpiel.child("Spieler "+ich).setValue("Leer");
+                //fireSpiel.child("Spieler "+ich).setValue("Leer");
             }
             this.dispose();
         }
@@ -303,27 +196,28 @@ public class MyFrame extends JFrame implements ActionListener
         }
         if (event.getSource() == ChPW){
             String[] PW = PasswdChangeBox();
-            fire.changePassword(Email, PW[0], PW[1],new Firebase.ResultHandler() {
-                    @Override
-                    public void onSuccess() {
-                        output.writeLine("Hat geklappt");
-                    }
+            /*fire.changePassword(Email, PW[0], PW[1],new Firebase.ResultHandler() {
+            @Override
+            public void onSuccess() {
+            output.writeLine("Hat geklappt");
+            }
 
-                    @Override
-                    public void onError(FirebaseError firebaseError) {
-                        output.writeLine(""+firebaseError);
-                    }
-                });
+            @Override
+            public void onError(FirebaseError firebaseError) {
+            output.writeLine(""+firebaseError);
+            }
+            });*/
         }
         for(int i=0;i<625;i++){
             if (event.getSource()==Buttons.get(i)){
-                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && darfIch && !SpielZuende){
+                if (toe.check((i%25)/5,(i%5),(i/25)/5,((i/25)%5)) && ich > -1 /*&& darfIch && !SpielZuende*/){
                     ArrayList<Integer> Koord = new ArrayList<Integer>();
                     Koord.add((i%25)/5);
                     Koord.add(i%5);
                     Koord.add((i/25)/5);
                     Koord.add((i/25)%5);
-                    fireSpiel.child("Feld").child(""+anzahlZüge).setValue(new Feld (Koord,ich));
+                    socket.send("P "+Koord.get(0)+" "+Koord.get(1)+" "+Koord.get(2)+" "+Koord.get(3)+" "+ich);
+                    //fireSpiel.child("Feld").child(""+anzahlZüge).setValue(new Feld (Koord,ich));
                     darfIch = false;
                 }
                 else {
@@ -345,7 +239,17 @@ public class MyFrame extends JFrame implements ActionListener
     }
 
     public void updateButton(Feld feld){
+        toe.addFeld(feld);
         Buttons.get((125*feld.gC(2))+(25*feld.gC(3))+(5*feld.gC(0))+feld.gC(1)).update(farbeSpieler.get(feld.spieler()));
+        if(toe.checkWin()){
+            ich = -1;
+            System.out.println("asdasdgfgd");
+            ArrayList<Feld> felder = toe.getWin();
+            for(Feld f : felder){
+                Buttons.get((125*f.gC(2))+(25*f.gC(3))+(5*f.gC(0))+f.gC(1)).update(new Color(100,100,100));
+            }
+        }
+
         System.out.println("setze Button was called");
     }
 } 

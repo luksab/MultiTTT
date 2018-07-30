@@ -1,10 +1,11 @@
 #BlueJ class context
-comment0.params=
-comment0.target=Checker()
-comment1.params=Felder
-comment1.target=boolean\ checkWin(java.util.ArrayList)
+comment0.target=Checker
+comment1.params=
+comment1.target=Checker()
 comment2.params=Felder
-comment2.target=java.util.ArrayList\ GetWin(java.util.ArrayList)
-comment3.params=feld\ Felder
-comment3.target=int\ Spielfeld(Feld,\ java.util.ArrayList)
-numComments=4
+comment2.target=boolean\ checkWin(java.util.ArrayList)
+comment3.params=Felder
+comment3.target=java.util.ArrayList\ GetWin(java.util.ArrayList)
+comment4.params=feld\ Felder
+comment4.target=int\ Spielfeld(Feld,\ java.util.ArrayList)
+numComments=5

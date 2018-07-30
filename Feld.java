@@ -16,6 +16,15 @@ public class Feld
         Koord = NKoord;
     }
 
+    public Feld(int a,int b,int c, int d)
+    {
+        Koord = new ArrayList<Integer>();
+        Koord.add(a);
+        Koord.add(b);     
+        Koord.add(c);  
+        Koord.add(d);
+    }
+
     public Feld(int Nreihe,ArrayList<Integer> NKoord)
     {
         Koord = NKoord;

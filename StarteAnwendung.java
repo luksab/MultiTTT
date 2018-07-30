@@ -11,7 +11,7 @@ public class StarteAnwendung
         new StarteAnwendung();
     }
 
-    public StarteAnwendung() 
+    public StarteAnwendung()
     {
         boolean SpMp = SpMp();
         if(!SpMp){

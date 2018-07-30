@@ -58,12 +58,19 @@ public class TicTacToe
                         return false;
                     }
                 }
-                if(Spielfeld(feld) == -1){
+                if(Felder.size() != 0)
+                    if(feld.getSpieler() != Felder.get(Felder.size()-1).getSpieler())
+                        if(Spielfeld(feld) == -1){
+                            return true;
+                        }
+                        else{
+                            return false;
+                        }
+                    else{
+                        return false;}
+                else if(feld.getSpieler()==0)
                     return true;
-                }
-                else{
-                    return false;
-                }
+                else return false;
             }
             catch(ArrayIndexOutOfBoundsException e){
                 return false;

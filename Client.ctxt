@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Client
+comment1.params=serverUri\ draft
+comment1.target=Client(java.net.URI,\ org.java_websocket.drafts.Draft)
+comment2.params=serverURI\ f
+comment2.target=Client(java.net.URI,\ MyFrame)
+comment3.params=handshakedata
+comment3.target=void\ onOpen(org.java_websocket.handshake.ServerHandshake)
+comment4.params=code\ reason\ remote
+comment4.target=void\ onClose(int,\ java.lang.String,\ boolean)
+comment5.params=message
+comment5.target=void\ onMessage(java.lang.String)
+comment6.params=message
+comment6.target=void\ onMessage(java.nio.ByteBuffer)
+comment7.params=ex
+comment7.target=void\ onError(java.lang.Exception)
+numComments=8

@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.target=Server
+comment0.text=\r\n\ MDTTTWebsocketServer\r\n\ \r\n\ @author\ Lukas\ Sabatschus\r\n
+comment1.params=address
+comment1.target=Server(java.net.InetSocketAddress)
+comment2.params=conn\ handshake
+comment2.target=void\ onOpen(org.java_websocket.WebSocket,\ org.java_websocket.handshake.ClientHandshake)
+comment3.params=conn\ code\ reason\ remote
+comment3.target=void\ onClose(org.java_websocket.WebSocket,\ int,\ java.lang.String,\ boolean)
+comment4.params=conn\ message
+comment4.target=void\ onMessage(org.java_websocket.WebSocket,\ java.lang.String)
+comment5.params=conn\ message
+comment5.target=void\ onMessage(org.java_websocket.WebSocket,\ java.nio.ByteBuffer)
+comment6.params=conn\ ex
+comment6.target=void\ onError(org.java_websocket.WebSocket,\ java.lang.Exception)
+comment7.params=
+comment7.target=void\ onStart()
+comment8.params=args
+comment8.target=void\ main(java.lang.String[])
+numComments=9
