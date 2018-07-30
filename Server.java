@@ -1,6 +1,8 @@
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
+import java.io.Console;
+import java.util.*;
+import java.io.IOException;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -72,9 +74,9 @@ public class Server extends WebSocketServer
         System.out.println("server started successfully");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         String host = "luksab.de";
-        int port = 8887;
+        int port = 8887;        
         WebSocketServer server = new Server(new InetSocketAddress(port));
         server.run();
     }

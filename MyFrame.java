@@ -69,6 +69,8 @@ public class MyFrame extends JFrame implements ActionListener
         farbeSpieler.add(new Color(200,0,200));
         farbeSpieler.add(new Color(200,200,0));
         farbeSpieler.add(new Color(173,216,230));
+        farbeSpieler.add(new Color(255,0,255));
+        farbeSpieler.add(new Color(255,255,0));
 
         this.setTitle(progName);
         this.setSize(width,height);
@@ -240,16 +242,21 @@ public class MyFrame extends JFrame implements ActionListener
 
     public void updateButton(Feld feld){
         toe.addFeld(feld);
-        Buttons.get((125*feld.gC(2))+(25*feld.gC(3))+(5*feld.gC(0))+feld.gC(1)).update(farbeSpieler.get(feld.spieler()));
+        Buttons.get((125*feld.gC(2))+(25*feld.gC(3))+(5*feld.gC(0))+feld.gC(1)).update(farbeSpieler.get(feld.spieler()+3));
+        if(toe.Felder.size() > 1){
+            Feld f = toe.Felder.get(toe.Felder.size()-2);
+            Buttons.get((125*f.gC(2))+(25*f.gC(3))+(5*f.gC(0))+f.gC(1)).update(farbeSpieler.get(f.spieler()));
+        }
+        String s = "ID: "+feld.getSpieler()+"Field: "+feld.gC(0)+" "+feld.gC(1)+" "+feld.gC(2)+" "+feld.gC(3);
+        output.writeLine(s);
         if(toe.checkWin()){
             ich = -1;
-            System.out.println("asdasdgfgd");
             ArrayList<Feld> felder = toe.getWin();
-            for(Feld f : felder){
-                Buttons.get((125*f.gC(2))+(25*f.gC(3))+(5*f.gC(0))+f.gC(1)).update(new Color(100,100,100));
+            output.writeLine(felder.get(0).getSpieler() + " won");
+            for(Feld fld : felder){
+                Buttons.get((125*fld.gC(2))+(25*fld.gC(3))+(5*fld.gC(0))+fld.gC(1)).update(new Color(100,100,100));
             }
         }
-
         System.out.println("setze Button was called");
     }
 } 

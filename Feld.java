@@ -24,16 +24,16 @@ public class Feld
         Koord.add(c);  
         Koord.add(d);
     }
+    
+    public Feld()
+    {
+        Koord = new ArrayList<Integer>();
+    }
 
     public Feld(int Nreihe,ArrayList<Integer> NKoord)
     {
         Koord = NKoord;
         reihe = Nreihe;
-    }
-
-    public Feld()
-    {
-
     }
 
     public ArrayList getK()

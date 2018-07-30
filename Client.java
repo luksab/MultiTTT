@@ -43,6 +43,7 @@ public class Client extends WebSocketClient {
         }
         if(message.split(" ")[0].equals("ID")){
             frame.ich = Integer.parseInt(message.split(" ")[1]);
+            frame.output.writeLine("You are ID "+message.split(" ")[1]);
         }
     }
 
